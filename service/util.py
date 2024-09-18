@@ -47,6 +47,7 @@ class RandomUtil:
         ming = RandomUtil.MING[random.randint(0, len(RandomUtil.MING) - 1)]
 
         return xing + ming
+    
 
 if __name__ == '__main__':
     print(RandomUtil.random_name_str())

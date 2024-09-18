@@ -1,8 +1,9 @@
-from gv import  Global
+from gv import Global
 import botpy
 from botpy import logging
 from botpy.message import GroupMessage
 from botpy.manage import GroupManageEvent
+from service import work_message, LFError
 
 _log = logging.get_logger()
 config = Global.config
@@ -23,12 +24,16 @@ class FLClient(botpy.Client):
 
     async def on_group_at_message_create(self, message: GroupMessage):
         user_id = message.author.member_openid
-        content = message.content
+        content = message.content.strip()
+        try:
+            resp = work_message(user_id=user_id, content=content)
+        except LFError:
+            resp = LFError.get_msg()
         await self.api.post_group_message(
             group_openid=message.group_openid,
-              msg_type=0,
-              msg_id=message.id,
-              content="22")
+            msg_type=0,
+            msg_id=message.id,
+            content="\n" + resp)
 
 
 if __name__ == "__main__":
