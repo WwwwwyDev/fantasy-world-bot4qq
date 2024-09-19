@@ -3,7 +3,8 @@ import botpy
 from botpy import logging
 from botpy.message import GroupMessage
 from botpy.manage import GroupManageEvent
-from service import work_message, LFError
+from service import work_message, LFError, work_delay_command
+import asyncio
 
 _log = logging.get_logger()
 config = Global.config
@@ -26,14 +27,30 @@ class FLClient(botpy.Client):
         user_id = message.author.member_openid
         content = message.content.strip()
         try:
-            resp = work_message(user_id=user_id, content=content)
+            resp, is_need_delay = await work_message(user_id=user_id, content=content)
         except LFError:
             resp = LFError.get_msg()
+            is_need_delay = False
+        delay_time = 0
+        delay_command = ""
+        if is_need_delay:
+            current_content, delay_time, delay_command = resp.split("|")
+        else:
+            current_content = resp
         await self.api.post_group_message(
             group_openid=message.group_openid,
             msg_type=0,
             msg_id=message.id,
-            content=resp)
+            content=current_content)
+        if is_need_delay:
+            await asyncio.sleep(int(delay_time))
+            delay_content = await work_delay_command(delay_command, user_id)
+            await self.api.post_group_message(
+                group_openid=message.group_openid,
+                msg_type=0,
+                msg_id=message.id,
+                msg_seq=2,
+                content=delay_content)
 
 
 if __name__ == "__main__":

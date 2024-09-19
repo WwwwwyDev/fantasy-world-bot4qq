@@ -1,7 +1,7 @@
 max_exp_base = 1000  # 下一级所需经验值
 
-class StatusBase:
 
+class StatusBase:
     blood_base = 500  # 血量
     mono_base = 100  # 魔力
     attack_base = 50  # 攻击力
@@ -12,3 +12,4 @@ class StatusBase:
     exp_add_base = 0  # 经验加成
 
 
+UserStatus = ["正在扫荡中"]

@@ -1,7 +1,8 @@
 from service.util import RandomUtil
 from gv import Global
 from service.error import LFError
-from service.default_params import get_default_user, get_default_user_status
+from service.default_params import get_default_user
+
 
 class User:
 
@@ -12,16 +13,13 @@ class User:
         self.level = int(mongo_dict["level"])
         self.coin = int(mongo_dict["coin"])
         self.tower_level = int(mongo_dict["tower_level"])
+        self.blood = mongo_dict["blood"]
+        self.mana = int(mongo_dict["mana"])
+        self.last_balance = int(mongo_dict["last_balance"])
 
     def get_id(self):
         return self._id
 
-class UserStatus:
-
-    def __init__(self, mongo_dict) -> None:
-        self._id = mongo_dict["_id"]
-        self.blood = mongo_dict["blood"]
-        self.mana = int(mongo_dict["mana"])
 
 class UserDao:
 
@@ -52,18 +50,18 @@ class UserDao:
         return User(mongo_dict)
 
     @staticmethod
-    def get_user_status_by_id(_id: str) -> UserStatus:
-        mongo_dict = Global.user_status_c.find_one({"_id": _id})
-        template_dict = get_default_user_status(_id)
-        filter_dict = {}
+    def get_user_by_name(name: str) -> User | None:
+        mongo_dict = Global.user_c.find_one({"name": name})
         if not mongo_dict:
-            mongo_dict = template_dict
-            Global.user_status_c.insert_one(mongo_dict)
+            return None
+        _id = mongo_dict["_id"]
+        template_dict = get_default_user(_id, mongo_dict["name"])
+        filter_dict = {}
         if len(mongo_dict) != len(template_dict):
             filter_dict = {k: v for k, v in template_dict.items() if k not in mongo_dict}
-            UserDao.update_user_status(_id, {"$set": filter_dict})
+            UserDao.update_user(_id, {"$set": filter_dict})
         mongo_dict.update(filter_dict)
-        return UserStatus(mongo_dict)
+        return User(mongo_dict)
 
     @staticmethod
     def update_user(_id: str, update: dict) -> None:
@@ -71,8 +69,3 @@ class UserDao:
         if result.matched_count == 0:
             raise LFError("[error] 数据库更新失败")
 
-    @staticmethod
-    def update_user_status(_id: str, update: dict) -> None:
-        result = Global.user_status_c.update_one(filter={"_id": _id}, update=update)
-        if result.matched_count == 0:
-            raise LFError("[error] 数据库更新失败")
