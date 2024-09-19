@@ -47,7 +47,16 @@ class RandomUtil:
         ming = RandomUtil.MING[random.randint(0, len(RandomUtil.MING) - 1)]
 
         return xing + ming
-    
+
+def head(title) -> str:
+    space_cnt =  15 - len(title)
+    space = " " * space_cnt
+    return f"\n{space}💫「{title}」💫\n-------------------------------\n"
+
+def tail(title) -> str:
+    space_cnt =  15 - len(title)
+    space = " " * space_cnt
+    return f"\n-------------------------------\n{space}💫「{title}」💫\n-------------------------------\n"
 
 if __name__ == '__main__':
     print(RandomUtil.random_name_str())

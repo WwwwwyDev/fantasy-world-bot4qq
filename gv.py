@@ -8,7 +8,8 @@ class Global:
     mongo_client = pymongo.MongoClient(
         f"mongodb://{config['mongodb']['user']}:{config['mongodb']['password']}@{config['mongodb']['host']}:{config['mongodb']['port']}/{config['mongodb']['database']}")
     mongo_db = mongo_client[config['mongodb']['database']]
-    user_db = mongo_db["user"]
+    user_c = mongo_db["user"]
+    user_status_c = mongo_db["user_status"]
 
 
 if __name__ == "__main__":

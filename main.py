@@ -33,7 +33,7 @@ class FLClient(botpy.Client):
             group_openid=message.group_openid,
             msg_type=0,
             msg_id=message.id,
-            content="\n" + resp)
+            content=resp)
 
 
 if __name__ == "__main__":
