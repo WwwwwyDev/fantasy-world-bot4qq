@@ -1,12 +1,12 @@
-from service.pojo import User, UserDao
-from service.error import LFError
-from service.control import main_control, delay_control
+from server.pojo.user import User
+from server.service.user import UserService
+from server.control import main_control, delay_control
 
 
 async def work_message(user_id: str, content: str) -> (str, bool):
-    user = UserDao.get_user_by_id(user_id)
+    user = UserService.get_user_by_id_with_up(user_id)
     if content == "开始冒险" and not user:
-        name = UserDao.register(user_id)
+        name = UserService.register(user_id)
         return f"恭喜{name}成为冒险者", False
     if content == "开始冒险" and user:
         return "你已经是冒险者了", False
@@ -24,7 +24,7 @@ async def work_message(user_id: str, content: str) -> (str, bool):
 
 
 async def work_delay_command(command: str, user_id: str) -> str:
-    user = UserDao.get_user_by_id(user_id)
+    user = UserService.get_user_by_id_with_up(user_id)
     return delay_control(command, user)
 
 

@@ -3,8 +3,10 @@ import botpy
 from botpy import logging
 from botpy.message import GroupMessage
 from botpy.manage import GroupManageEvent
-from service import work_message, LFError, work_delay_command
+from server import work_message, work_delay_command
 import asyncio
+
+from server.error import LFError
 
 _log = logging.get_logger()
 config = Global.config
@@ -24,12 +26,25 @@ class FLClient(botpy.Client):
         )
 
     async def on_group_at_message_create(self, message: GroupMessage):
+        # payload: Ark = Ark(
+        #     template_id=24,
+        #     kv=[
+        #         ArkKv(key="#DESC#", value="通知提醒"),
+        #         ArkKv(key="#PROMPT#", value="标题"),
+        #         ArkKv(key="#TITLE#", value="标题"),
+        #     ],
+        # )
+        # a = await self.api.post_group_message(
+        #     group_openid=message.group_openid,
+        #     msg_type=3,
+        #     msg_seq=1,
+        #     ark=payload,)
         user_id = message.author.member_openid
         content = message.content.strip()
         try:
             resp, is_need_delay = await work_message(user_id=user_id, content=content)
         except LFError:
-            resp = LFError.get_msg()
+            resp = "后台异常"
             is_need_delay = False
         delay_time = 0
         delay_command = ""

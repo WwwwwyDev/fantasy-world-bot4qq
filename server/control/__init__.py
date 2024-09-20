@@ -1,12 +1,14 @@
-from service.pojo.user import User
-from service.control.help import help_menu, adventure_menu, tower_menu
-from service.control.user import user_info, user_update, user_id, user_attribute, user_attack, last_attack_record
-from service.control.tower import tower_info, tower_balance, tower_wipe, tower_wipe_delay, tower_attack
-
+from server.pojo.user import User
+from server.control.help import help_menu, adventure_menu, tower_menu, store_menu, forge_menu
+from server.control.user import user_info, user_update, user_id, user_attribute, user_attack, last_attack_record,change_name, user_bag
+from server.control.tower import tower_info, tower_balance, tower_wipe, tower_wipe_delay, tower_attack
+from server.control.store import see_store, buy_item
 command_mp = {
     "主菜单": help_menu,
     "冒险菜单": adventure_menu,
     "幻塔菜单": tower_menu,
+    "商店菜单": store_menu,
+    "铁匠铺菜单": forge_menu,
     "查看当层信息": tower_info,
     "我的信息": user_info,
     "id": user_id,
@@ -16,7 +18,11 @@ command_mp = {
     "查看战斗报告": last_attack_record,
     "幻塔结算": tower_balance,
     "幻塔扫荡": tower_wipe,
-    "挑战当层首领": tower_attack
+    "挑战当层首领": tower_attack,
+    "改名": change_name,
+    "查看商店": see_store,
+    "我的背包": user_bag,
+    "购买": buy_item
 }
 
 add_mp = {}

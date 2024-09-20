@@ -1,6 +1,6 @@
 import random
 import numpy as np
-from service.default_params import Tower
+from server.default_params import Tower
 
 
 def make_decision(probability: float) -> bool:

@@ -9,7 +9,6 @@ class StatusBase:
     critical_strike_base = 0.1  # 暴击率
     critical_damage_base = 0.2  # 暴击伤害
     speed_base = 10  # 速度
-    exp_add_base = 0  # 经验加成
 
 
 UserStatus = ["正在扫荡中"]
