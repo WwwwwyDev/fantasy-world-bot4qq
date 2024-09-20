@@ -1,23 +1,62 @@
 from server.base_params import max_exp_base
 from server.pojo.combat import UserCombatPojo
+from server.pojo.item import ItemEquip
 from server.pojo.user import User
 from server.util import head, separate
 from server.service.combat import CombatService
 from server.service.user import UserService
 from server.service.item import ItemService
 
+
 def user_info(params: list, user: User) -> str:
     return head("我的信息") + f"""[昵称] {user.name}
 [等级] {user.level}
 [经验] {user.exp} / {user.level * max_exp_base}
 [💰] {user.coin}
-[幻塔层数] 第{user.tower_level}层""" + separate("装备与技能") + f"""[武器] {user.weapon_equip}
-[头盔] {user.head_equip}
-[上衣] {user.body_equip}
-[鞋子] {user.foot_equip}
-[护符] {user.talisman_equip}
-[技能] {user.skill}
+[幻塔层数] 第{user.tower_level}层""" + separate(
+        "装备与技能") + f"""[武器+{user.weapon_level}] {user.weapon_equip["name"] if user.weapon_equip["name"] else "未装备"}
+[头盔+{user.head_level}] {user.head_equip["name"] if user.head_equip["name"] else "未装备"}
+[上装+{user.body_level}] {user.body_equip["name"] if user.body_equip["name"] else "未装备"}
+[下装+{user.pants_level}] {user.pants_equip["name"] if user.pants_equip["name"] else "未装备"}
+[鞋子+{user.foot_level}] {user.foot_equip["name"] if user.foot_equip["name"] else "未装备"}
+[护符+{user.talisman_level}] {user.talisman_equip["name"] if user.talisman_equip["name"] else "未装备"}
+[技能] {user.skill["name"]}
 """
+
+
+equip_name_mp = {
+    "weapon_equip": "武器",
+    "head_equip": "头盔",
+    "body_equip": "上装",
+    "pants_equip": "下装",
+    "foot_equip": "鞋子",
+    "talisman_equip": "护符"
+}
+
+equip_level_mp = {
+    "weapon_equip": "weapon_level",
+    "head_equip": "head_level",
+    "body_equip": "body_level",
+    "pants_equip": "pants_level",
+    "foot_equip": "foot_level",
+    "talisman_equip": "talisman_level"
+}
+
+
+def user_equip(params: list, user: User) -> str:
+    content = head("我的装备")
+    for equip_mongo_name, equip_name in equip_name_mp.items():
+        name = user.mongo_dict[equip_mongo_name]["name"]
+        if name:
+            item_id = user.mongo_dict[equip_mongo_name]["id"]
+            item: ItemEquip = ItemService.get_item_by_id(item_id)
+            if not item:
+                continue
+            content += f"[{equip_name}] {name}\n"
+            bs_level = user.mongo_dict[equip_level_mp[equip_mongo_name]]
+            content += item.add_status.get_desc(bs_level)
+    return content
+
 
 def user_bag(params: list, user: User) -> str:
     if len(params) < 1:
@@ -29,7 +68,7 @@ def user_bag(params: list, user: User) -> str:
             return "指令错误"
         if page <= 0:
             return "指令错误"
-    bag_list = [[k, v] for k,v in user.bag.items()]
+    bag_list = [[k, v] for k, v in user.bag.items()]
     offset = 10
     total = len(bag_list) // offset + 1
     if page > total:
@@ -40,9 +79,10 @@ def user_bag(params: list, user: User) -> str:
         name = "未知"
         if item:
             name = item.name
-        res_content += f"[{i+1}] {name}    数量: {bag_list[i][1]}\n"
+        res_content += f"[{i + 1}] {name}({item.type})    数量: {bag_list[i][1]}\n"
     return head("我的背包") + res_content + separate("你的资产") + f"💰:{user.coin}" + separate(
         f"第{page}页  共{total}页")
+
 
 def user_id(params: list, user: User) -> str:
     return user.get_id()
@@ -50,7 +90,7 @@ def user_id(params: list, user: User) -> str:
 
 def user_attribute(params: list, user: User) -> str:
     attribute = UserCombatPojo(user)
-    return head("我的属性") + CombatService.get_attribute_content(attribute) + f"\n[经验加成] {user.exp_add_cnt} %"
+    return head("我的属性") + CombatService.get_attribute_content(attribute) + f"\n[经验加成] {user.exp_add_cnt}%"
 
 
 def user_update(params: list, user: User) -> (str, bool):
@@ -59,7 +99,9 @@ def user_update(params: list, user: User) -> (str, bool):
         return f"升级失败，还需{need_exp - user.exp}点经验才能升级"
     user.level += 1
     attribute = UserCombatPojo(user)
-    UserService.update_user(user.get_id(), {"$inc": {"exp": -need_exp, "level": 1, "blood": attribute.blood_max - attribute.current_blood, "mana": attribute.mana_max - attribute.current_mana}})
+    UserService.update_user(user.get_id(), {
+        "$inc": {"exp": -need_exp, "level": 1, "blood": attribute.blood_max - attribute.current_blood,
+                 "mana": attribute.mana_max - attribute.current_mana}})
     return f"升级成功, {user.level}级->{user.level + 1}级"
 
 
@@ -97,13 +139,14 @@ def last_attack_record(params: list, user: User) -> str:
     if len(last_combat_record_list) < 1:
         return "近期没有战斗记录"
     offset = 6
-    total = len(last_combat_record_list)//offset+1
+    total = len(last_combat_record_list) // offset + 1
     if page > total:
         return f"共{total}页报告，第{page}页不存在"
     res_content = ""
     for i in range((page - 1) * offset, min(page * offset, len(last_combat_record_list))):
-        res_content += f"[{i+1}]" +last_combat_record_list[i] + "\n"
+        res_content += f"[{i + 1}]" + last_combat_record_list[i] + "\n"
     return head("战斗详细报告") + res_content + separate(f"第{page}页  共{total}页")
+
 
 def change_name(params: list, user: User) -> str:
     return "昵称改为:" + UserService.change_name(user.get_id())

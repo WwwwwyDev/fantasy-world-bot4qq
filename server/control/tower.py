@@ -9,7 +9,6 @@ from server.service.user import UserService
 from server.util import gen_ico, head, separate
 
 
-
 def tower_info(params: list, user: User) -> str:
     ico_res = gen_ico(user.tower_level)
     monster_name = Tower.monster_name[(user.tower_level - 1) % Tower.tower_max]
@@ -32,7 +31,8 @@ def tower_balance(params: list, user: User) -> str:
     exp_add = user.exp_add_cnt * 0.01
     exp_num = int((normal_total_num * user.tower_level + advanced_total_num * user.tower_level * 3) * (1 + exp_add))
     coin = (advanced_total_num + normal_total_num) * user.tower_level
-    UserService.update_user(user.get_id(), {"$inc": {"exp": exp_num, "coin": coin}, "$set": {"last_balance": current_time}})
+    UserService.update_user(user.get_id(),
+                            {"$inc": {"exp": exp_num, "coin": coin}, "$set": {"last_balance": current_time}})
     return head(f"结算信息") + f"""[挂机时长] {hook_time}秒
 [获得经验] {exp_num}点
 [获得金币] {coin}个

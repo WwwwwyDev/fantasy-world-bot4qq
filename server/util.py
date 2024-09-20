@@ -88,13 +88,13 @@ class RandomUtil:
 
 
 def head(title) -> str:
-    space_cnt = 15 - len(title)
+    space_cnt = 10 - len(title)
     space = " " * space_cnt
-    return f"\n{space}💫「{title}」💫\n-------------------------------\n"
+    return f"\n{space}💫「{title}」💫\n-------------------------\n"
 
 
 def separate(title) -> str:
-    cnt = 13 - len(title) // 2
+    cnt = 9 - len(title) // 2
     pre = "-" * cnt
     return f"\n{pre}{title}{pre}\n"
 

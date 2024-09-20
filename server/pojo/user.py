@@ -12,12 +12,20 @@ class User:
         self.exp_add_cnt = int(mongo_dict["exp_add_cnt"])
         self.head_equip = mongo_dict["head_equip"]
         self.body_equip = mongo_dict["body_equip"]
+        self.pants_equip = mongo_dict["pants_equip"]
         self.foot_equip = mongo_dict["foot_equip"]
         self.weapon_equip = mongo_dict["weapon_equip"]
         self.talisman_equip = mongo_dict["talisman_equip"]
+        self.head_level = mongo_dict["head_level"]
+        self.body_level = mongo_dict["body_level"]
+        self.pants_level = mongo_dict["pants_level"]
+        self.foot_level = mongo_dict["foot_level"]
+        self.weapon_level = mongo_dict["weapon_level"]
+        self.talisman_level = mongo_dict["talisman_level"]
         self.skill = mongo_dict["skill"]
         self.bag: dict = mongo_dict["bag"]
         self.last_balance = int(mongo_dict["last_balance"])
+        self.mongo_dict = mongo_dict
 
     def get_id(self):
         return self._id
