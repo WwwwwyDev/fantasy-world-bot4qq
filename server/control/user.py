@@ -21,7 +21,7 @@ def user_info(params: list, user: User) -> str:
 [下装+{user.pants_level}] {user.pants_equip["name"] if user.pants_equip["name"] else "未装备"}
 [鞋子+{user.foot_level}] {user.foot_equip["name"] if user.foot_equip["name"] else "未装备"}
 [护符+{user.talisman_level}] {user.talisman_equip["name"] if user.talisman_equip["name"] else "未装备"}
-[技能] {user.skill["name"]}
+[技能] {user.skill["name"] if user.skill["name"] else "未学习"}
 """
 
 

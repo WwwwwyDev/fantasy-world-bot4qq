@@ -43,7 +43,7 @@ for command_k in command_mp.keys():
 
 command_mp.update(add_mp)
 
-need_delay_command = {"幻塔扫荡"}
+need_delay_command = {"幻塔扫荡", "/幻塔扫荡"}
 
 
 def main_control(command: str, params: list, user: User) -> (str, bool):

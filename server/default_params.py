@@ -6,7 +6,7 @@ def get_default_user(_id, name):
             "name": name,
             "exp": 0,
             "level": 1,
-            "coin": 100000000,
+            "coin": 1000000,
             "tower_level": 1,
             "blood": 500,
             "mana": 100,
