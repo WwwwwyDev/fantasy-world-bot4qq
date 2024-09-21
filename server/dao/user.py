@@ -6,7 +6,6 @@ from server.pojo.user import User
 
 class UserDao:
 
-
     @staticmethod
     def get_user_by_id(_id: str) -> User | None:
         mongo_dict = Global.user_c.find_one({"_id": _id})
@@ -55,9 +54,7 @@ class UserDao:
             raise LFError("[error] 数据库更新失败")
 
     @staticmethod
-    def insert_user_one(self, mongo_dict: dict) -> None:
+    def insert_user_one(mongo_dict: dict) -> None:
         result = Global.user_c.insert_one(mongo_dict)
         if not result:
             raise LFError("[error] 数据库更新失败")
-
-
