@@ -56,11 +56,15 @@ class UserCombatPojo(CombatPojo):
             self.current_blood = self.blood_max
         else:
             self.current_blood = current_blood
+        if self.current_blood < 0:
+            self.current_blood = 0
         self.mana_max = StatusBase.mana_base * user_level + add_attribute.mana_max
         if current_mana > self.mana_max:
             self.current_mana = self.mana_max
         else:
             self.current_mana = current_mana
+        if self.current_mana < 0:
+            self.current_mana = 0
         self.attack = StatusBase.attack_base * user_level + add_attribute.attack
         self.defense = StatusBase.defense_base * user_level + add_attribute.defense
         self.speed = StatusBase.speed_base + add_attribute.speed

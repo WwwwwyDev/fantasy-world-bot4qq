@@ -24,7 +24,7 @@ def normal_attack(pojo_proactive: CombatPojo, pojo_reactive: CombatPojo) -> str:
 class CombatService:
     @staticmethod
     def attack_one(pojo_proactive: CombatPojo, pojo_reactive: CombatPojo) -> str:
-        if pojo_proactive.skill_callback:
+        if pojo_proactive.skill_callback and pojo_proactive.current_mana > 0:
             content, is_happen = pojo_proactive.skill_callback(pojo_proactive, pojo_reactive)
             if is_happen:
                 return content
@@ -87,8 +87,8 @@ class CombatService:
 [攻击] {attribute.attack}
 [防御] {attribute.defense}
 [速度] {attribute.speed}
-[暴击率] {attribute.critical_strike * 100:.1f}%
-[暴击伤害] {attribute.critical_damage * 100:.1f}%"""
+[暴击率] {int(attribute.critical_strike * 100)}%
+[暴击伤害] {int(attribute.critical_damage * 100)}%"""
 
     @staticmethod
     def get_combat_record(user_id: str) -> dict | None:

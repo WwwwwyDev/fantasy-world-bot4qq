@@ -41,6 +41,6 @@ def strengthen_equip_true(params: list, user: User) -> str:
     UserService.update_user(user.get_id(),
                             {"$set": {"bag": user.bag}, "$inc": {mongo_equip: add_level}})
     if add_level:
-        return f"强化成功，剩余{remain_stone}个强化石"
+        return f"{equip}部位 {current_level}->{current_level + 1} 强化成功，剩余{remain_stone}个强化石，下一次强化成功率为{int(max(1 - (current_level+1) * 0.07, 0.03) * 100)}%"
     else:
-        return f"强化失败，剩余{remain_stone}个强化石"
+        return f"{equip}部位强化失败，剩余{remain_stone}个强化石，成功率{int(p * 100)}%"

@@ -67,6 +67,6 @@ def tower_attack(params: list, user: User) -> str:
     add_content = ""
     if is_win:
         UserService.update_user(user.get_id(), {"$inc": {"tower_level": 1}})
-        add_content = "成功进入下一层"
-    UserService.update_user(user.get_id(), {"$set": {"blood": ucp.current_blood, "mana": ucp.current_mana}})
+        add_content = f"成功进入第{user.tower_level+1}层"
+    UserService.update_user(user.get_id(), {"$set": {"blood": max(ucp.current_blood, 0), "mana": max(ucp.current_mana, 0)}})
     return head("战斗报告") + res_content + separate("战斗结果") + attack_result + add_content

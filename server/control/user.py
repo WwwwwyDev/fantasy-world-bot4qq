@@ -80,7 +80,7 @@ def user_update(params: list, user: User) -> (str, bool):
     if user.exp < need_exp:
         return f"升级失败，还需{need_exp - user.exp}点经验才能升级"
     user.level += 1
-    attribute = UserCombatPojo(user)
+    attribute = get_user_attack_pojo(user)
     UserService.update_user(user.get_id(), {
         "$inc": {"exp": -need_exp, "level": 1, "blood": attribute.blood_max - attribute.current_blood,
                  "mana": attribute.mana_max - attribute.current_mana}})
