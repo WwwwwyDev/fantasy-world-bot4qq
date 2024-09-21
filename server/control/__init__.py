@@ -7,7 +7,8 @@ from server.control.item import see_item, use_normal_item, use_skill_item, use_e
 from server.control.store import see_store, buy_item
 from server.control.blacksmith import strengthen_equip, strengthen_equip_true
 command_mp = {
-    "主菜单": help_menu,
+    "帮助菜单": help_menu,
+    "帮助": help_menu,
     "冒险菜单": adventure_menu,
     "幻塔菜单": tower_menu,
     "商店菜单": store_menu,
