@@ -31,7 +31,7 @@ def N3(user: User, user_combat_pojo: CombatPojo, cnt: int) -> str:
                                           update={"$set": {"blood": user_combat_pojo.blood_max}})
         if result.matched_count == 0:
             raise LFError("[error] 数据库更新失败")
-        return f"你的生命已回满，恢复了{current_blood + add_blood - user_combat_pojo.blood_max}点生命"
+        return f"你的生命已回满，恢复了{user_combat_pojo.blood_max - current_blood}点生命"
     else:
         result = Global.user_c.update_one(filter={"_id": user.get_id()}, update={"$inc": {"blood": add_blood}})
         if result.matched_count == 0:
