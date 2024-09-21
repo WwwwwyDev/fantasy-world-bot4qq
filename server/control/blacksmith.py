@@ -1,15 +1,7 @@
 from server.service.user import UserService
 from server.pojo.user import User
 from server.util import make_decision
-
-equip_mp = {
-    "武器": "weapon_level",
-    "头盔": "head_level",
-    "上装": "body_level",
-    "下装": "pants_level",
-    "鞋子": "foot_level",
-    "护符": "talisman_level",
-}
+from server.control.util import equip_mp
 
 
 def strengthen_equip(params: list, user: User) -> str:

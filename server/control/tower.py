@@ -1,8 +1,9 @@
 import time
 import random
 
+from server.control import util
 from server.default_params import Tower
-from server.pojo.combat import TowerMonsterCombatPojo, UserCombatPojo
+from server.pojo.attack import TowerMonsterCombatPojo, UserCombatPojo
 from server.pojo.user import User
 from server.service.combat import CombatService
 from server.service.user import UserService
@@ -58,12 +59,14 @@ def tower_wipe_delay(user: User) -> str:
 
 
 def tower_attack(params: list, user: User) -> str:
+    if user.blood <= 0:
+        return "血量为0,无法挑战"
     tmcp = TowerMonsterCombatPojo(user.tower_level)
-    ucp = UserCombatPojo(user)
+    ucp = util.get_user_attack_pojo(user)
     is_win, res_content, attack_result = CombatService.attack(ucp, tmcp, user.get_id())
     add_content = ""
     if is_win:
         UserService.update_user(user.get_id(), {"$inc": {"tower_level": 1}})
         add_content = "成功进入下一层"
-    UserService.update_user(user.get_id(), {"$set": {"blood": ucp.current_blood, "coin": ucp.current_mana}})
+    UserService.update_user(user.get_id(), {"$set": {"blood": ucp.current_blood, "mana": ucp.current_mana}})
     return head("战斗报告") + res_content + separate("战斗结果") + attack_result + add_content

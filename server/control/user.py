@@ -1,11 +1,12 @@
 from server.base_params import max_exp_base
-from server.pojo.combat import UserCombatPojo
+from server.pojo.attack import UserCombatPojo
 from server.pojo.item import ItemEquip
 from server.pojo.user import User
 from server.util import head, separate
 from server.service.combat import CombatService
 from server.service.user import UserService
 from server.service.item import ItemService
+from server.control.util import equip_name_mp, equip_level_mp, get_user_attack_pojo
 
 
 def user_info(params: list, user: User) -> str:
@@ -24,25 +25,6 @@ def user_info(params: list, user: User) -> str:
 """
 
 
-equip_name_mp = {
-    "weapon_equip": "武器",
-    "head_equip": "头盔",
-    "body_equip": "上装",
-    "pants_equip": "下装",
-    "foot_equip": "鞋子",
-    "talisman_equip": "护符"
-}
-
-equip_level_mp = {
-    "weapon_equip": "weapon_level",
-    "head_equip": "head_level",
-    "body_equip": "body_level",
-    "pants_equip": "pants_level",
-    "foot_equip": "foot_level",
-    "talisman_equip": "talisman_level"
-}
-
-
 def user_equip(params: list, user: User) -> str:
     content = head("我的装备")
     for equip_mongo_name, equip_name in equip_name_mp.items():
@@ -50,11 +32,13 @@ def user_equip(params: list, user: User) -> str:
         if name:
             item_id = user.mongo_dict[equip_mongo_name]["id"]
             item: ItemEquip = ItemService.get_item_by_id(item_id)
-            if not item:
-                continue
-            content += f"[{equip_name}] {name}\n"
             bs_level = user.mongo_dict[equip_level_mp[equip_mongo_name]]
+            if not item:
+                content += f"[{equip_name}] 未装备\n + {bs_level}"
+            content += f"[{equip_name}] {name} + {bs_level}\n"
             content += item.add_status.get_desc(bs_level)
+        else:
+            content += f"[{equip_name}] 未装备\n"
     return content
 
 
@@ -76,10 +60,8 @@ def user_bag(params: list, user: User) -> str:
     res_content = ""
     for i in range((page - 1) * offset, min(page * offset, len(bag_list))):
         item = ItemService.get_item_by_id(bag_list[i][0])
-        name = "未知"
         if item:
-            name = item.name
-        res_content += f"[{i + 1}] {name}({item.type})    数量: {bag_list[i][1]}\n"
+            res_content += f"[{i + 1}] {item.name}({item.type})    数量: {bag_list[i][1]}\n"
     return head("我的背包") + res_content + separate("你的资产") + f"💰:{user.coin}" + separate(
         f"第{page}页  共{total}页")
 
@@ -89,7 +71,7 @@ def user_id(params: list, user: User) -> str:
 
 
 def user_attribute(params: list, user: User) -> str:
-    attribute = UserCombatPojo(user)
+    attribute = get_user_attack_pojo(user)
     return head("我的属性") + CombatService.get_attribute_content(attribute) + f"\n[经验加成] {user.exp_add_cnt}%"
 
 
@@ -114,10 +96,10 @@ def user_attack(params: list, user: User) -> str:
     another_user = UserService.get_user_by_name_with_up(user_name)
     if not another_user:
         return f"冒险者\"{user_name}\"不存在"
-    me = UserCombatPojo(user)
+    me = get_user_attack_pojo(user)
     me.current_blood = me.blood_max
     me.current_mana = me.mana_max
-    another = UserCombatPojo(another_user)
+    another = get_user_attack_pojo(another_user)
     _, res_content, attack_result = CombatService.attack(me, another, user.get_id())
     return head("战斗报告") + res_content + separate("战斗结果") + attack_result
 

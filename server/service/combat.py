@@ -1,23 +1,37 @@
 import random
 
 from server.dao.combat import CombatDao
-from server.pojo.combat import CombatPojo
+from server.pojo.attack import CombatPojo
 from server.util import make_decision
+
+
+def normal_attack(pojo_proactive: CombatPojo, pojo_reactive: CombatPojo) -> str:
+    content = ""
+    base_attack = max(pojo_proactive.attack - pojo_reactive.defense, 1) * random.uniform(1.1, 1.2)
+    content += f"{pojo_proactive.name}发动普通攻击,"
+    is_critical = make_decision(pojo_proactive.critical_strike)
+    if is_critical:
+        content += "并造成了暴击,"
+        base_attack = (1 + pojo_proactive.critical_damage) * base_attack
+    base_attack = int(base_attack)
+    pojo_reactive.current_blood -= base_attack
+    if pojo_reactive.current_blood < 0:
+        pojo_reactive.current_blood = 0
+    content += f"对{pojo_reactive.name}造成{base_attack}点伤害"
+    return content
 
 
 class CombatService:
     @staticmethod
     def attack_one(pojo_proactive: CombatPojo, pojo_reactive: CombatPojo) -> str:
-        base_attack = max(pojo_proactive.attack - pojo_reactive.defense, 1) * random.uniform(1.1, 1.2)
-        is_critical = make_decision(pojo_proactive.critical_strike)
-        if is_critical:
-            base_attack = (1 + pojo_proactive.critical_damage) * base_attack
-        base_attack = int(base_attack)
-        pojo_reactive.current_blood -= base_attack
-        if pojo_reactive.current_blood < 0:
-            pojo_reactive.current_blood = 0
-        content = f"{pojo_proactive.name}发动普通攻击，对{pojo_reactive.name}造成{base_attack}点伤害"
-        return content
+        if pojo_proactive.skill_callback:
+            content, is_happen = pojo_proactive.skill_callback(pojo_proactive, pojo_reactive)
+            if is_happen:
+                return content
+            else:
+                return normal_attack(pojo_proactive, pojo_reactive)
+        else:
+            return normal_attack(pojo_proactive, pojo_reactive)
 
     @staticmethod
     def attack(pojo1: CombatPojo, pojo2: CombatPojo, user_id: str) -> (bool, str, str):
@@ -26,27 +40,23 @@ class CombatService:
         record_content_list = []
         speed1 = pojo1.speed
         speed2 = pojo2.speed
+        min_speed = min(speed1, speed2)
         while pojo1.current_blood > 0 and pojo2.current_blood > 0 and max_attack:
             add_content = ""
             if pojo1.speed > pojo2.speed:
                 add_content += f"{CombatService.attack_one(pojo1, pojo2)}"
-                pojo1.speed -= speed2
             elif pojo2.speed > pojo1.speed:
                 add_content += f"{CombatService.attack_one(pojo2, pojo1)}"
-                pojo2.speed -= speed1
             else:
                 if make_decision(0.5):
                     add_content += f"{CombatService.attack_one(pojo1, pojo2)}"
-                    pojo1.speed -= speed2
                 else:
                     add_content += f"{CombatService.attack_one(pojo2, pojo1)}"
-                    pojo2.speed -= speed1
-            if pojo1.speed < 0:
+            pojo1.speed -= min_speed
+            pojo2.speed -= min_speed
+            if pojo1.speed <= 0:
                 pojo1.speed = speed1
-            if pojo2.speed < 0:
-                pojo2.speed = speed2
-            if pojo2.speed == 0 and pojo1.speed == 0:
-                pojo1.speed = speed1
+            if pojo2.speed <= 0:
                 pojo2.speed = speed2
             add_content += f"\n{pojo1.name}:{pojo1.current_blood}🩸，{pojo2.name}:{pojo2.current_blood}🩸"
             record_content_list.append(add_content)

@@ -3,6 +3,7 @@ from server.pojo.user import User
 from server.service.item import ItemService
 from server.util import head
 from server.service.user import UserService
+from server.control.util import get_user_attack_pojo
 
 
 def see_item(params: list, user: User) -> str:
@@ -69,7 +70,7 @@ def use_normal_item(params: list, user: User) -> str:
     if user.bag[item.id] == 0:
         del user.bag[item.id]
     UserService.update_user(user.get_id(), {"$set": {"bag": user.bag}})
-    return item.after_use(user, cnt)
+    return item.after_use(user, get_user_attack_pojo(user), cnt)
 
 
 def use_skill_item(params: list, user: User) -> str:
