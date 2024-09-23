@@ -1,5 +1,5 @@
 max_exp_base = 1000  # 下一级所需经验值
-bs_rate = 0.2  # 强化基准加成倍率
+bs_rate = 0.15  # 强化基准加成倍率
 
 
 class StatusBase:

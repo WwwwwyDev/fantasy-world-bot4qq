@@ -163,3 +163,4 @@ cython_debug/
 
 .log
 .out
+botpy.log.*

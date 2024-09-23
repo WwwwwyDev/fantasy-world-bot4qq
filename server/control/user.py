@@ -1,8 +1,7 @@
 from server.base_params import max_exp_base
-from server.pojo.attack import UserCombatPojo
 from server.pojo.item import ItemEquip
 from server.pojo.user import User
-from server.util import head, separate
+from server.util import head, separate, filter_num
 from server.service.combat import CombatService
 from server.service.user import UserService
 from server.service.item import ItemService
@@ -11,10 +10,10 @@ from server.control.util import equip_name_mp, equip_level_mp, get_user_attack_p
 
 def user_info(params: list, user: User) -> str:
     return head("我的信息") + f"""[昵称] {user.name}
-[等级] {user.level}
-[经验] {user.exp} / {user.level * max_exp_base}
-[💰] {user.coin}
-[幻塔层数] 第{user.tower_level}层""" + separate(
+[等级] {filter_num(user.level)}
+[经验] {filter_num(user.exp)} / {filter_num(user.level * max_exp_base)}
+[💰] {filter_num(user.coin)}
+[幻塔层数] 第{filter_num(user.tower_level)}层""" + separate(
         "装备与技能") + f"""[武器+{user.weapon_level}] {user.weapon_equip["name"] if user.weapon_equip["name"] else "未装备"}
 [头盔+{user.head_level}] {user.head_equip["name"] if user.head_equip["name"] else "未装备"}
 [上装+{user.body_level}] {user.body_equip["name"] if user.body_equip["name"] else "未装备"}
@@ -54,15 +53,18 @@ def user_bag(params: list, user: User) -> str:
             return "指令错误"
     bag_list = [[k, v] for k, v in user.bag.items()]
     offset = 10
-    total = len(bag_list) // offset + 1
+    if not len(bag_list) % offset:
+        total = len(bag_list) // offset
+    else:
+        total = len(bag_list) // offset + 1
     if page > total:
         return f"共{total}页，第{page}页不存在"
     res_content = ""
     for i in range((page - 1) * offset, min(page * offset, len(bag_list))):
         item = ItemService.get_item_by_id(bag_list[i][0])
         if item:
-            res_content += f"[{i + 1}] {item.name}({item.type})    数量: {bag_list[i][1]}\n"
-    return head("我的背包") + res_content + separate("你的资产") + f"💰:{user.coin}" + separate(
+            res_content += f"[{i + 1}] {item.name}({item.type})  数量: {filter_num(bag_list[i][1])}\n"
+    return head("我的背包") + res_content + separate("你的资产") + f"💰:{filter_num(user.coin)}" + separate(
         f"第{page}页  共{total}页")
 
 
@@ -72,19 +74,21 @@ def user_id(params: list, user: User) -> str:
 
 def user_attribute(params: list, user: User) -> str:
     attribute = get_user_attack_pojo(user)
-    return head("我的属性") + CombatService.get_attribute_content(attribute) + f"\n[经验加成] {user.exp_add_cnt}%"
+    CombatService.get_combat_score(attribute)
+    return (head("我的属性") + CombatService.get_attribute_content(attribute) +
+            f"\n[经验加成] {user.exp_add_cnt}%") + f"\n[最终战斗力] {filter_num(CombatService.get_combat_score(attribute))}"
 
 
 def user_update(params: list, user: User) -> (str, bool):
     need_exp = user.level * max_exp_base
     if user.exp < need_exp:
-        return f"升级失败，还需{need_exp - user.exp}点经验才能升级"
+        return f"升级失败，还需{filter_num(need_exp - user.exp)}点经验才能升级"
     user.level += 1
     attribute = get_user_attack_pojo(user)
     UserService.update_user(user.get_id(), {
         "$inc": {"exp": -need_exp, "level": 1, "blood": attribute.blood_max - attribute.current_blood,
                  "mana": attribute.mana_max - attribute.current_mana}})
-    return f"升级成功, {user.level}级->{user.level + 1}级"
+    return f"升级成功, {filter_num(user.level)}级->{filter_num(user.level + 1)}级"
 
 
 def user_attack(params: list, user: User) -> str:
@@ -120,10 +124,13 @@ def last_attack_record(params: list, user: User) -> str:
     last_combat_record_list = combat_record["last_record"]
     if len(last_combat_record_list) < 1:
         return "近期没有战斗记录"
-    offset = 6
-    total = len(last_combat_record_list) // offset + 1
+    offset = 8
+    if not len(last_combat_record_list) % offset:
+        total = len(last_combat_record_list) // offset
+    else:
+        total = len(last_combat_record_list) // offset + 1
     if page > total:
-        return f"共{total}页报告，第{page}页不存在"
+        return f"共{total}页报告，第{filter_num(page)}页不存在"
     res_content = ""
     for i in range((page - 1) * offset, min(page * offset, len(last_combat_record_list))):
         res_content += f"[{i + 1}]" + last_combat_record_list[i] + "\n"

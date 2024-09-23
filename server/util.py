@@ -10,6 +10,11 @@ def make_decision(probability: float) -> bool:
         probability = 0
     return np.random.choice([True, False], p=[probability, 1 - probability])
 
+def make_decision_list(keys: list, values: list, cnt: int) -> str:
+    keys.append(None)
+    values.append(1 - sum(values))
+    return np.random.choice(keys, cnt, p=values)
+
 
 class RandomUtil:
     NAME_XING = ['赵', '钱', '孙', '李', '周', '吴', '郑', '王', '冯', '陈', '褚', '卫', '蒋', '沈', '韩', '杨', '朱',
@@ -88,13 +93,13 @@ class RandomUtil:
 
 
 def head(title) -> str:
-    space_cnt = 10 - len(title)
+    space_cnt = 13 - len(title)
     space = " " * space_cnt
-    return f"\n{space}💫「{title}」💫\n-------------------------\n"
+    return f"\n{space}💫「{title}」💫\n----------------------------\n"
 
 
 def separate(title) -> str:
-    cnt = 9 - len(title) // 2
+    cnt = 12 - len(title) // 2
     pre = "-" * cnt
     return f"\n{pre}{title}{pre}\n"
 
@@ -116,6 +121,12 @@ def gen_ico(tower_level: int) -> str:
     boom = boom_cnt * "💥"
     return boom + crown + sun + moon + star
 
+white_code = "⁡"
+def filter_num(num: int) -> str:
+    num_str = str(num)
+    if len(num_str) < 5:
+        return  num_str
+    return white_code.join(num_str[i:i + 4] for i in range(0, len(num_str), 4))
 
 if __name__ == '__main__':
-    print(RandomUtil.random_name_str())
+    pass

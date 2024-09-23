@@ -38,21 +38,36 @@ command_mp = {
     "确认强化": strengthen_equip_true
 }
 
+
+
 add_mp = {}
+sorted_command = []
 for command_k in command_mp.keys():
     add_mp["/" + command_k] = command_mp[command_k]
+    sorted_command.append(command_k)
+    sorted_command.append("/" + command_k)
 
 command_mp.update(add_mp)
 
-need_delay_command = {"幻塔扫荡", "/幻塔扫荡"}
+sorted_command = sorted(sorted_command, key=lambda string: len(string), reverse=True)
 
+need_delay_command = {"幻塔扫荡", "/幻塔扫荡"}
 
 def main_control(command: str, params: list, user: User) -> (str, bool):
     if command not in command_mp:
-        return "指令错误", False
+        f = False
+        for e in sorted_command:
+            if command.startswith(e):
+                params.insert(0, command[len(e):])
+                command = e
+                f = True
+                break
+        if not f:
+            return "指令错误", False
     if command in need_delay_command:
         return command_mp[command](params, user), True
     return command_mp[command](params, user), False
+
 
 
 delay_command_mp = {

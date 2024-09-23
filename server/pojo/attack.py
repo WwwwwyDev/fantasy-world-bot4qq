@@ -68,6 +68,6 @@ class UserCombatPojo(CombatPojo):
         self.attack = StatusBase.attack_base * user_level + add_attribute.attack
         self.defense = StatusBase.defense_base * user_level + add_attribute.defense
         self.speed = StatusBase.speed_base + add_attribute.speed
-        self.critical_strike = min(StatusBase.critical_strike_base + add_attribute.critical_strike, 1)
+        self.critical_strike = StatusBase.critical_strike_base + add_attribute.critical_strike
         self.critical_damage = StatusBase.critical_damage_base + add_attribute.critical_damage
         self.skill_callback = skill_callback

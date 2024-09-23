@@ -42,17 +42,17 @@ def get_user_attack_pojo(user: User) -> UserCombatPojo:
         if not eq_item:
             continue
         eq_level = user.mongo_dict[v]
-        attr.blood_max += eq_item.add_status.blood_max + int(
-            eq_level * eq_item.add_status.blood_max * bs_rate)
+        attr.blood_max += eq_item.add_status.blood_max + int(eq_level * eq_item.add_status.blood_max * bs_rate)
         attr.mana_max += eq_item.add_status.mana_max + int(eq_level * eq_item.add_status.mana_max * bs_rate)
         attr.attack += eq_item.add_status.attack + int(eq_level * eq_item.add_status.attack * bs_rate)
         attr.defense += eq_item.add_status.defense + int(eq_level * eq_item.add_status.defense * bs_rate)
-        attr.critical_strike += eq_item.add_status.critical_strike + int(eq_level * eq_item.add_status.critical_strike * bs_rate)
-        attr.critical_damage += eq_item.add_status.critical_damage + int(eq_level * eq_item.add_status.critical_damage * bs_rate)
-        attr.speed += eq_item.add_status.speed + int(eq_level * eq_item.add_status.speed * bs_rate)
+        attr.critical_strike += eq_item.add_status.critical_strike
+        attr.critical_damage += eq_item.add_status.critical_damage + eq_level * eq_item.add_status.critical_damage * bs_rate
+        attr.speed += eq_item.add_status.speed
     on_attack = None
     if user.skill["id"]:
         sk_item = ItemService.get_item_by_id(user.skill["id"])
         if sk_item:
             on_attack = ItemService.get_item_by_id(user.skill["id"]).on_attack
     return UserCombatPojo(user.name, user.level, user.blood, user.mana, attr, on_attack)
+

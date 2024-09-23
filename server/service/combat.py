@@ -2,14 +2,14 @@ import random
 
 from server.dao.combat import CombatDao
 from server.pojo.attack import CombatPojo
-from server.util import make_decision
+from server.util import make_decision, filter_num
 
 
 def normal_attack(pojo_proactive: CombatPojo, pojo_reactive: CombatPojo) -> str:
     content = ""
     base_attack = max(pojo_proactive.attack - pojo_reactive.defense, 1) * random.uniform(1.1, 1.2)
     content += f"{pojo_proactive.name}发动普通攻击,"
-    is_critical = make_decision(pojo_proactive.critical_strike)
+    is_critical = make_decision(min(pojo_proactive.critical_strike, 1))
     if is_critical:
         content += "并造成了暴击,"
         base_attack = (1 + pojo_proactive.critical_damage) * base_attack
@@ -41,6 +41,7 @@ class CombatService:
         speed1 = pojo1.speed
         speed2 = pojo2.speed
         min_speed = min(speed1, speed2)
+        f = 0
         while pojo1.current_blood > 0 and pojo2.current_blood > 0 and max_attack:
             add_content = ""
             if pojo1.speed > pojo2.speed:
@@ -48,10 +49,19 @@ class CombatService:
             elif pojo2.speed > pojo1.speed:
                 add_content += f"{CombatService.attack_one(pojo2, pojo1)}"
             else:
-                if make_decision(0.5):
-                    add_content += f"{CombatService.attack_one(pojo1, pojo2)}"
+                if f:
+                    if f == 1:
+                        add_content += f"{CombatService.attack_one(pojo2, pojo1)}"
+                    else:
+                        add_content += f"{CombatService.attack_one(pojo1, pojo2)}"
+                    f = 0
                 else:
-                    add_content += f"{CombatService.attack_one(pojo2, pojo1)}"
+                    if make_decision(0.5):
+                        add_content += f"{CombatService.attack_one(pojo1, pojo2)}"
+                        f = 1
+                    else:
+                        add_content += f"{CombatService.attack_one(pojo2, pojo1)}"
+                        f = 2
             pojo1.speed -= min_speed
             pojo2.speed -= min_speed
             if pojo1.speed <= 0:
@@ -82,13 +92,18 @@ class CombatService:
 
     @staticmethod
     def get_attribute_content(attribute: CombatPojo):
-        return f"""[血量] {attribute.current_blood} / {attribute.blood_max}
-[魔力] {attribute.current_mana} / {attribute.mana_max}
-[攻击] {attribute.attack}
-[防御] {attribute.defense}
+        return f"""[血量] {filter_num(attribute.current_blood)} / {filter_num(attribute.blood_max)}
+[魔力] {filter_num(attribute.current_mana)} / {filter_num(attribute.mana_max)}
+[攻击] {filter_num(attribute.attack)}
+[防御] {filter_num(attribute.defense)}
 [速度] {attribute.speed}
 [暴击率] {int(attribute.critical_strike * 100)}%
-[暴击伤害] {int(attribute.critical_damage * 100)}%"""
+[暴击伤害] {filter_num(int(attribute.critical_damage * 100))}%"""
+
+    @staticmethod
+    def get_combat_score(attribute: CombatPojo):
+        result_attack = attribute.attack * (1 + attribute.critical_damage)
+        return int(attribute.blood_max * 0.1 + attribute.mana_max * 0.1 + attribute.defense + attribute.speed * 10 + attribute.critical_strike * 1000 + result_attack)
 
     @staticmethod
     def get_combat_record(user_id: str) -> dict | None:

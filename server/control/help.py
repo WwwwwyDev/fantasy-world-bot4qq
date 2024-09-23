@@ -1,7 +1,7 @@
 from server.pojo.user import User
 from server.util import head
 
-hm_l = ["冒险菜单", "幻塔菜单", "商店菜单", "铁匠铺菜单"]
+hm_l = ["冒险菜单 - 查看冒险相关指令", "幻塔菜单 - 挂机获取资源", "商店菜单 - 购买物品", "铁匠铺菜单 - 强化装备"]
 HM = head("帮助菜单")
 for i, e in enumerate(hm_l):
     HM += f"{[i + 1]} {e}\n"

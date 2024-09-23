@@ -1,7 +1,7 @@
 from server.pojo.item import ItemNormal, ItemSkill, ItemEquip
 from server.pojo.user import User
 from server.service.item import ItemService
-from server.util import head
+from server.util import head, filter_num
 from server.service.user import UserService
 from server.control.util import get_user_attack_pojo
 
@@ -13,7 +13,7 @@ def see_item(params: list, user: User) -> str:
     item = ItemService.get_item_by_name(item_name)
     if not item:
         return "不存在该物品"
-    return head(item.name + f"({item.type})") + item.description
+    return head(item.name + f"({item.type})") + item.description + f"\n购买价格:{filter_num(item.price)+'💰' if item.is_on_store else '无法购买'}\n出售价格:{filter_num(int(item.price*0.6))}💰"
 
 
 def sale_item(params: list, user: User) -> str:
