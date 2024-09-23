@@ -1,6 +1,6 @@
 from server.base_params import StatusBase
 from server.default_params import Tower
-
+from server.util import gen_ico
 
 class Attribute:
     def __init__(self, blood_max=0, mana_max=0, attack=0, defense=0, speed=0, critical_strike=0, critical_damage=0):
@@ -33,16 +33,16 @@ class TowerMonsterCombatPojo(CombatPojo):
 
     def __init__(self, tower_level: int):
         super().__init__()
-        self.name = Tower.monster_name[(tower_level - 1) % Tower.tower_max]
-        self.current_blood = int(tower_level * StatusBase.blood_base * 1.5)
+        self.name = Tower.monster_name[(tower_level - 1) % Tower.tower_max] + gen_ico(tower_level)
+        self.current_blood = int(tower_level * StatusBase.blood_base * 1.3)
         self.blood_max = self.current_blood
-        self.current_mana = int(tower_level * StatusBase.mana_base * 1.5)
+        self.current_mana = int(tower_level * StatusBase.mana_base * 1.3)
         self.mana_max = self.current_mana
         self.attack = int(StatusBase.attack_base * tower_level * 1.2)
-        self.defense = int(StatusBase.defense_base * tower_level * 1.2)
-        self.speed = StatusBase.speed_base + tower_level // 1000
-        self.critical_strike = min(StatusBase.critical_strike_base + tower_level / 15000, 1)
-        self.critical_damage = StatusBase.critical_damage_base + tower_level / 10000
+        self.defense = int(StatusBase.defense_base * tower_level)
+        self.speed = StatusBase.speed_base + tower_level // 500
+        self.critical_strike = min(StatusBase.critical_strike_base + tower_level / 1500, 1.5)
+        self.critical_damage = StatusBase.critical_damage_base + tower_level / 1000
 
 
 class UserCombatPojo(CombatPojo):

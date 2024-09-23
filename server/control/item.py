@@ -8,17 +8,17 @@ from server.control.util import get_user_attack_pojo
 
 def see_item(params: list, user: User) -> str:
     if len(params) < 1:
-        return "指令错误"
+        return "指令错误，请输入你想要查看的物品名字"
     item_name = params[0]
     item = ItemService.get_item_by_name(item_name)
     if not item:
         return "不存在该物品"
-    return head(item.name + f"({item.type})") + item.description + f"\n购买价格:{filter_num(item.price)+'💰' if item.is_on_store else '无法购买'}\n出售价格:{filter_num(int(item.price*0.6))}💰"
+    return head(item.name + f"({item.type})") + item.description + f"\n购买价格:{filter_num(item.price)+'💰' if ItemService.get_store_item_by_name(item_name) else '无法购买'}\n出售价格:{filter_num(item.out_price)}💰"
 
 
 def sale_item(params: list, user: User) -> str:
     if len(params) < 1:
-        return "指令错误"
+        return "指令错误，请输入你需要出售的物品及数量"
     if "+" not in params[0]:
         item_name = params[0]
         cnt = 1
@@ -39,7 +39,7 @@ def sale_item(params: list, user: User) -> str:
     user.bag[item.id] -= cnt
     if user.bag[item.id] == 0:
         del user.bag[item.id]
-    get_coin = int(cnt * item.price * 0.6)
+    get_coin = int(cnt * item.out_price)
     UserService.update_user(user.get_id(),
                             {"$set": {"bag": user.bag}, "$inc": {"coin": get_coin}})
     return f"出售{cnt}个{item_name}成功，获得{get_coin}💰"
@@ -47,7 +47,7 @@ def sale_item(params: list, user: User) -> str:
 
 def use_normal_item(params: list, user: User) -> str:
     if len(params) < 1:
-        return "指令错误"
+        return "指令错误，请输入你想要使用的物品名字"
     if "+" not in params[0]:
         item_name = params[0]
         cnt = 1
@@ -75,7 +75,7 @@ def use_normal_item(params: list, user: User) -> str:
 
 def use_skill_item(params: list, user: User) -> str:
     if len(params) < 1:
-        return "指令错误"
+        return "指令错误，请输入你想要学习的技能名字"
     item_name = params[0]
     item: ItemSkill = ItemService.get_item_by_name(item_name)
     if not item:
@@ -96,7 +96,7 @@ position_mp = ["weapon_equip", "head_equip", "body_equip", "pants_equip", "foot_
 
 def use_equip_item(params: list, user: User) -> str:
     if len(params) < 1:
-        return "指令错误"
+        return "指令错误，请输入你想要装备的装备名字"
     item_name = params[0]
     item: ItemEquip = ItemService.get_item_by_name(item_name)
     if not item:
@@ -120,7 +120,7 @@ def use_equip_item(params: list, user: User) -> str:
 
 def off_equip_item(params: list, user: User) -> str:
     if len(params) < 1:
-        return "指令错误"
+        return "指令错误，请输入你想要卸下的装备名字"
     item_name = params[0]
     f_p = -1
     for i, e in enumerate(position_mp):

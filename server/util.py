@@ -10,7 +10,8 @@ def make_decision(probability: float) -> bool:
         probability = 0
     return np.random.choice([True, False], p=[probability, 1 - probability])
 
-def make_decision_list(keys: list, values: list, cnt: int) -> str:
+
+def make_decision_list(keys: list, values: list, cnt: int) -> list:
     keys.append(None)
     values.append(1 - sum(values))
     return np.random.choice(keys, cnt, p=values)
@@ -121,12 +122,16 @@ def gen_ico(tower_level: int) -> str:
     boom = boom_cnt * "💥"
     return boom + crown + sun + moon + star
 
+
 white_code = "⁡"
+
+
 def filter_num(num: int) -> str:
     num_str = str(num)
     if len(num_str) < 5:
-        return  num_str
+        return num_str
     return white_code.join(num_str[i:i + 4] for i in range(0, len(num_str), 4))
+
 
 if __name__ == '__main__':
     pass

@@ -24,7 +24,10 @@ class User:
         self.talisman_level = mongo_dict["talisman_level"]
         self.skill = mongo_dict["skill"]
         self.bag: dict = mongo_dict["bag"]
-        self.last_balance = int(mongo_dict["last_balance"])
+        self.last_tower_balance = int(mongo_dict["last_tower_balance"])
+        self.last_bank_balance = int(mongo_dict["last_bank_balance"])
+        self.bank_coin = int(mongo_dict["bank_coin"])
+        self.bank_level = int(mongo_dict["bank_level"])
         self.mongo_dict = mongo_dict
 
     def get_id(self):

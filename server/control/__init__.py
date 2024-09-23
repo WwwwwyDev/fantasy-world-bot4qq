@@ -1,11 +1,12 @@
 from server.pojo.user import User
-from server.control.help import help_menu, adventure_menu, tower_menu, store_menu, forge_menu
+from server.control.help import help_menu, adventure_menu, tower_menu, store_menu, forge_menu, bank_menu
 from server.control.user import (user_info, user_update, user_id, user_attribute, user_attack, last_attack_record,
                                  change_name, user_bag, user_equip)
 from server.control.tower import tower_info, tower_balance, tower_wipe, tower_wipe_delay, tower_attack
 from server.control.item import see_item, use_normal_item, use_skill_item, use_equip_item, off_equip_item, sale_item
 from server.control.store import see_store, buy_item
-from server.control.blacksmith import strengthen_equip, strengthen_equip_true
+from server.control.blacksmith import strengthen_equip
+from server.control.bank import see_bank,set_bank_coin,get_bank_coin,get_bank_interest, up_bank_level
 command_mp = {
     "帮助菜单": help_menu,
     "帮助": help_menu,
@@ -13,6 +14,7 @@ command_mp = {
     "幻塔菜单": tower_menu,
     "商店菜单": store_menu,
     "铁匠铺菜单": forge_menu,
+    "幻庄菜单": bank_menu,
     "查看幻塔信息": tower_info,
     "我的信息": user_info,
     "我的装备": user_equip,
@@ -35,7 +37,11 @@ command_mp = {
     "卸下": off_equip_item,
     "出售": sale_item,
     "强化": strengthen_equip,
-    "确认强化": strengthen_equip_true
+    "查看幻庄": see_bank,
+    "幻庄存金币": set_bank_coin,
+    "幻庄取金币": get_bank_coin,
+    "幻庄结算": get_bank_interest,
+    "幻庄会员升级": up_bank_level
 }
 
 

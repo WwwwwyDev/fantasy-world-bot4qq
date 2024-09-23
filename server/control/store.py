@@ -32,7 +32,7 @@ def see_store(params: list, user: User) -> str:
 
 def buy_item(params: list, user: User) -> str:
     if len(params) < 1:
-        return "指令错误"
+        return "指令错误，请输入你想要购买的商品名字及数量"
     if "+" not in params[0]:
         item_name = params[0]
         cnt = 1

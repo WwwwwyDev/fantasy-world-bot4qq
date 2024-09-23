@@ -12,7 +12,7 @@ def user_info(params: list, user: User) -> str:
     return head("我的信息") + f"""[昵称] {user.name}
 [等级] {filter_num(user.level)}
 [经验] {filter_num(user.exp)} / {filter_num(user.level * max_exp_base)}
-[💰] {filter_num(user.coin)}
+[金币💰] {filter_num(user.coin)}
 [幻塔层数] 第{filter_num(user.tower_level)}层""" + separate(
         "装备与技能") + f"""[武器+{user.weapon_level}] {user.weapon_equip["name"] if user.weapon_equip["name"] else "未装备"}
 [头盔+{user.head_level}] {user.head_equip["name"] if user.head_equip["name"] else "未装备"}
@@ -76,7 +76,7 @@ def user_attribute(params: list, user: User) -> str:
     attribute = get_user_attack_pojo(user)
     CombatService.get_combat_score(attribute)
     return (head("我的属性") + CombatService.get_attribute_content(attribute) +
-            f"\n[经验加成] {user.exp_add_cnt}%") + f"\n[最终战斗力] {filter_num(CombatService.get_combat_score(attribute))}"
+            f"\n[经验加成] {user.exp_add_cnt}%") + f"\n[战斗力] {filter_num(CombatService.get_combat_score(attribute))}"
 
 
 def user_update(params: list, user: User) -> (str, bool):

@@ -70,5 +70,5 @@ class FLClient(botpy.Client):
 
 if __name__ == "__main__":
     intents = botpy.Intents(public_messages=True)
-    client = FLClient(intents=intents)
+    client = FLClient(intents=intents, is_sandbox=True)
     client.run(appid=str(config["appid"]), secret=str(config["secret"]))

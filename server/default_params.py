@@ -25,7 +25,11 @@ def get_default_user(_id, name):
             "talisman_level": 0,
             "skill": {"id": "", "name": ""},
             "bag": {},
-            "last_balance": int(time.time())}
+            "last_tower_balance": int(time.time()),
+            "last_bank_balance": int(time.time()),
+            "bank_coin": 0,
+            "bank_level": 0,
+            }
 
 
 class Tower:
@@ -43,8 +47,6 @@ class Tower:
     exp_base = 200
     coin_base = 100
     tower_max = len(monster_name)
-    monster_dropping = ["N1", "N2", "N3", "N4", "N5", "N6", "N7", "N8", "N9", "SP1"]
-    monster_dropping_p = [0.02, 0.0002, 0.07, 0.07, 0.04, 0.04, 0.02, 0.02, 0.005, 0.06]
 
 
 if __name__ == "__main__":
