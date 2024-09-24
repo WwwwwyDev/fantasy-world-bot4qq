@@ -10,6 +10,7 @@ class User:
         self.blood = mongo_dict["blood"]
         self.mana = int(mongo_dict["mana"])
         self.exp_add_cnt = int(mongo_dict["exp_add_cnt"])
+        self.coin_add_cnt = int(mongo_dict["coin_add_cnt"])
         self.head_equip = mongo_dict["head_equip"]
         self.body_equip = mongo_dict["body_equip"]
         self.pants_equip = mongo_dict["pants_equip"]

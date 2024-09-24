@@ -1,5 +1,5 @@
 from server.dao.item import items_mp_by_name, items_mp_by_id, store_items, store_items_mp_by_name, \
-    tower_monster_dropping, tower_monster_dropping_p
+    tower_monster_dropping, tower_monster_dropping_p, equip_dropping, equip_dropping_p
 from server.pojo.item import Item, ItemNormal, ItemEquip, ItemSkill, ItemSpecial
 
 
@@ -30,4 +30,8 @@ class ItemService:
     @staticmethod
     def get_tower_monster_dropping_items_list() -> (list[Item], list[float]):
         return tower_monster_dropping, tower_monster_dropping_p
+
+    @staticmethod
+    def get_equip_dropping_items_list() -> (list[Item], list[float]):
+        return equip_dropping, equip_dropping_p
 

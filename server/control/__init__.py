@@ -69,7 +69,7 @@ def main_control(command: str, params: list, user: User) -> (str, bool):
                 f = True
                 break
         if not f:
-            return "指令错误", False
+            return "没有该指令，请查看帮助菜单", False
     if command in need_delay_command:
         return command_mp[command](params, user), True
     return command_mp[command](params, user), False

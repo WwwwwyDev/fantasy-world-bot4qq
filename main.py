@@ -1,3 +1,5 @@
+from botpy.types.message import Ark, ArkKv
+
 from gv import Global
 import botpy
 from botpy import logging
@@ -11,6 +13,34 @@ from server.error import LFError
 _log = logging.get_logger()
 config = Global.config
 
+async def work(message: GroupMessage):
+    user_id = message.author.member_openid
+    content = message.content.strip()
+    try:
+        resp, is_need_delay = await work_message(user_id=user_id, content=content)
+    except LFError:
+        resp = "后台异常"
+        is_need_delay = False
+    delay_time = 0
+    delay_command = ""
+    if is_need_delay:
+        current_content, delay_time, delay_command = resp.split("|")
+    else:
+        current_content = resp
+    await message._api.post_group_message(
+        group_openid=message.group_openid,
+        msg_type=0,
+        msg_id=message.id,
+        content=current_content)
+    if is_need_delay:
+        await asyncio.sleep(int(delay_time))
+        delay_content = await work_delay_command(delay_command, user_id)
+        await message._api.post_group_message(
+            group_openid=message.group_openid,
+            msg_type=0,
+            msg_id=message.id,
+            msg_seq=2,
+            content=delay_content)
 
 class FLClient(botpy.Client):
 
@@ -37,35 +67,8 @@ class FLClient(botpy.Client):
         # a = await self.api.post_group_message(
         #     group_openid=message.group_openid,
         #     msg_type=3,
-        #     msg_seq=1,
         #     ark=payload,)
-        user_id = message.author.member_openid
-        content = message.content.strip()
-        try:
-            resp, is_need_delay = await work_message(user_id=user_id, content=content)
-        except LFError:
-            resp = "后台异常"
-            is_need_delay = False
-        delay_time = 0
-        delay_command = ""
-        if is_need_delay:
-            current_content, delay_time, delay_command = resp.split("|")
-        else:
-            current_content = resp
-        await self.api.post_group_message(
-            group_openid=message.group_openid,
-            msg_type=0,
-            msg_id=message.id,
-            content=current_content)
-        if is_need_delay:
-            await asyncio.sleep(int(delay_time))
-            delay_content = await work_delay_command(delay_command, user_id)
-            await self.api.post_group_message(
-                group_openid=message.group_openid,
-                msg_type=0,
-                msg_id=message.id,
-                msg_seq=2,
-                content=delay_content)
+        await work(message)
 
 
 if __name__ == "__main__":

@@ -107,20 +107,23 @@ def separate(title) -> str:
 
 def gen_ico(tower_level: int) -> str:
     star_cnt = (tower_level - 1) // Tower.tower_max
-    moon_cnt = star_cnt // 4
-    star_cnt -= moon_cnt * 4
+    black_star_cnt = star_cnt // 4
+    star_cnt -= black_star_cnt * 4
+    moon_cnt = black_star_cnt // 4
+    black_star_cnt -= moon_cnt * 4
     sun_cnt = moon_cnt // 4
     moon_cnt -= sun_cnt * 4
     crown_cnt = sun_cnt // 4
     sun_cnt -= crown_cnt * 4
     boom_cnt = crown_cnt // 4
     crown_cnt -= boom_cnt * 4
-    star = star_cnt * "⭐"
-    moon = moon_cnt * "🌙"
-    sun = sun_cnt * "☀️"
-    crown = crown_cnt * "👑"
-    boom = boom_cnt * "💥"
-    return boom + crown + sun + moon + star
+    star = star_cnt * "☆"
+    black_star = black_star_cnt * "★"
+    moon = moon_cnt * "☾"
+    sun = sun_cnt * "✹"
+    crown = crown_cnt * "♚"
+    boom = boom_cnt * "卐"
+    return boom + crown + sun + moon + black_star + star
 
 
 white_code = "⁡"

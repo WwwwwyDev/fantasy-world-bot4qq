@@ -18,8 +18,10 @@ def strengthen_equip(params: list, user: User) -> str:
     if user.bag["SP1"] < num:
         return f"强化所需{num}个强化石，还差{num - user.bag['SP1']}个"
     min_p = 0.03
-    if current_level >= 20:
+    if current_level >= 30:
         min_p = 0.01
+    elif current_level >= 20:
+        min_p = 0.02
     p = max(1 - current_level * 0.07, min_p)
     add_level = 0
     if make_decision(p):

@@ -12,7 +12,7 @@ def see_bank(params: list, user: User) -> str:
     return head("幻庄账户") + f"""[金币💰] {filter_num(user.bank_coin)}
 [当前利息] {filter_num(interest)}
 [会员等级] {bank_level_mp[user.bank_level]}
-[一秒日化利率] {(0.00000041 + 0.00000005 * (user.bank_level + 1)) * 86400 * 100:.4f}%
+[一秒日化利率] {(0.00000039 + 0.00000005 * (user.bank_level + 1)) * 86400 * 100:.4f}%
 [距离上一次利息结算时间] {filter_num(hook_time)}秒"""
 
 
@@ -67,5 +67,5 @@ def up_bank_level(params: list, user: User) -> str:
 def count_interest(user: User) -> (int, int):
     current_time = int(time.time())
     hook_time = current_time - user.last_bank_balance
-    interest = int(min(user.bank_coin, 100000000) * hook_time * (0.00000041 + 0.00000005 * (user.bank_level + 1)))
+    interest = int(min(user.bank_coin, 100000000) * hook_time * (0.00000039 + 0.00000005 * (user.bank_level + 1)))
     return hook_time, interest

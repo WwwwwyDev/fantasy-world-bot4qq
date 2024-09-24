@@ -94,11 +94,13 @@ class CombatService:
     def get_attribute_content(attribute: CombatPojo):
         return f"""[血量] {filter_num(attribute.current_blood)} / {filter_num(attribute.blood_max)}
 [魔力] {filter_num(attribute.current_mana)} / {filter_num(attribute.mana_max)}
-[攻击] {filter_num(attribute.attack)}
-[防御] {filter_num(attribute.defense)}
+[攻击] {filter_num(int(attribute.attack))}
+[防御] {filter_num(int(attribute.defense))}
 [速度] {attribute.speed}
 [暴击率] {int(attribute.critical_strike * 100)}%
-[暴击伤害] {filter_num(int(attribute.critical_damage * 100))}%"""
+[暴击伤害] {filter_num(int(attribute.critical_damage * 100))}%
+[抗暴] {filter_num(int(attribute.defense_strike * 100))}%
+[伤害加成] {filter_num(int(attribute.hurt_percentage_add * 100))}%"""
 
     @staticmethod
     def get_combat_score(attribute: CombatPojo):

@@ -34,10 +34,10 @@ def user_equip(params: list, user: User) -> str:
             bs_level = user.mongo_dict[equip_level_mp[equip_mongo_name]]
             if not item:
                 content += f"[{equip_name}] 未装备\n + {bs_level}"
-            content += f"[{equip_name}] {name} + {bs_level}\n"
-            content += item.add_status.get_desc(bs_level)
+            content += f"[{equip_name}] {name} (+{bs_level})\n"
+            content += item.add_status.get_desc(bs_level) + "\n\n"
         else:
-            content += f"[{equip_name}] 未装备\n"
+            content += f"[{equip_name}] 未装备\n\n"
     return content
 
 
@@ -75,8 +75,7 @@ def user_id(params: list, user: User) -> str:
 def user_attribute(params: list, user: User) -> str:
     attribute = get_user_attack_pojo(user)
     CombatService.get_combat_score(attribute)
-    return (head("我的属性") + CombatService.get_attribute_content(attribute) +
-            f"\n[经验加成] {user.exp_add_cnt}%") + f"\n[战斗力] {filter_num(CombatService.get_combat_score(attribute))}"
+    return head("我的属性") + CombatService.get_attribute_content(attribute) + f"\n[经验加成] {user.exp_add_cnt}%" +  f"\n[金币加成] {user.coin_add_cnt}%" + f"\n[战斗力] {filter_num(CombatService.get_combat_score(attribute))}"
 
 
 def user_update(params: list, user: User) -> (str, bool):

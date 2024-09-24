@@ -11,6 +11,7 @@ def get_default_user(_id, name):
             "blood": 500,
             "mana": 100,
             "exp_add_cnt": 0,
+            "coin_add_cnt": 0,
             "head_equip": {"id": "", "name": ""},
             "body_equip": {"id": "", "name": ""},
             "pants_equip": {"id": "", "name": ""},

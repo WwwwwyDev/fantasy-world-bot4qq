@@ -48,6 +48,10 @@ def get_user_attack_pojo(user: User) -> UserCombatPojo:
         attr.defense += eq_item.add_status.defense + int(eq_level * eq_item.add_status.defense * bs_rate)
         attr.critical_strike += eq_item.add_status.critical_strike
         attr.critical_damage += eq_item.add_status.critical_damage + eq_level * eq_item.add_status.critical_damage * bs_rate
+        attr.defense_strike += eq_item.add_status.defense_strike
+        attr.hurt_percentage_add += eq_item.add_status.hurt_percentage_add
+        attr.attack_percentage_add += eq_item.add_status.attack_percentage_add
+        attr.defense_percentage_add += eq_item.add_status.defense_percentage_add
         attr.speed += eq_item.add_status.speed
     on_attack = None
     if user.skill["id"]:

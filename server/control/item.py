@@ -42,7 +42,7 @@ def sale_item(params: list, user: User) -> str:
     get_coin = int(cnt * item.out_price)
     UserService.update_user(user.get_id(),
                             {"$set": {"bag": user.bag}, "$inc": {"coin": get_coin}})
-    return f"出售{cnt}个{item_name}成功，获得{get_coin}💰"
+    return f"出售{filter_num(cnt)}个{item_name}成功，获得{filter_num(get_coin)}💰"
 
 
 def use_normal_item(params: list, user: User) -> str:
@@ -66,11 +66,13 @@ def use_normal_item(params: list, user: User) -> str:
         return "背包中没有该物品"
     if cnt > user.bag[item.id]:
         return "物品数量不够"
-    user.bag[item.id] -= cnt
-    if user.bag[item.id] == 0:
-        del user.bag[item.id]
-    UserService.update_user(user.get_id(), {"$set": {"bag": user.bag}})
-    return item.after_use(user, get_user_attack_pojo(user), cnt)
+    use_content, result_cnt = item.after_use(user, get_user_attack_pojo(user), cnt)
+    if result_cnt:
+        user.bag[item.id] -= result_cnt
+        if user.bag[item.id] == 0:
+            del user.bag[item.id]
+        UserService.update_user(user.get_id(), {"$set": {"bag": user.bag}})
+    return use_content + f"，消耗了{result_cnt}个{item_name}"
 
 
 def use_skill_item(params: list, user: User) -> str:
