@@ -9,7 +9,7 @@ bank_level_mp = ["普通会员", "白银会员", "黄金会员", "铂金会员",
 
 def see_bank(params: list, user: User) -> str:
     hook_time, interest = count_interest(user)
-    return head("幻庄账户") + f"""[金币💰] {filter_num(user.bank_coin)}
+    return head("幻行账户") + f"""[金币💰] {filter_num(user.bank_coin)}
 [当前利息] {filter_num(interest)}
 [会员等级] {bank_level_mp[user.bank_level]}
 [一秒日化利率] {(0.00000039 + 0.00000005 * (user.bank_level + 1)) * 86400 * 100:.4f}%
@@ -27,7 +27,7 @@ def set_bank_coin(params: list, user: User) -> str:
     hook_time, interest = count_interest(user)
     UserService.update_user(user.get_id(), {
         "$inc": {"coin": interest - num, "bank_coin": num, "last_bank_balance": hook_time}})
-    return f"存入幻庄账户{filter_num(num)}💰，并获得{filter_num(hook_time)}秒的利息{filter_num(interest)}💰"
+    return f"存入幻行账户{filter_num(num)}💰，并获得{filter_num(hook_time)}秒的利息{filter_num(interest)}💰"
 
 
 def get_bank_coin(params: list, user: User) -> str:
@@ -39,11 +39,11 @@ def get_bank_coin(params: list, user: User) -> str:
     except:
         return "指令错误"
     if num > user.bank_coin:
-        return "你的幻庄账户中没有那么多金币"
+        return "你的幻行账户中没有那么多金币"
     hook_time, interest = count_interest(user)
     UserService.update_user(user.get_id(), {
         "$inc": {"coin": interest + num, "bank_coin": -num, "last_bank_balance": hook_time}})
-    return f"从幻庄账户中取出{filter_num(num)}💰，并获得{filter_num(hook_time)}秒的利息{filter_num(interest)}💰"
+    return f"从幻行账户中取出{filter_num(num)}💰，并获得{filter_num(hook_time)}秒的利息{filter_num(interest)}💰"
 
 
 def get_bank_interest(params: list, user: User) -> str:

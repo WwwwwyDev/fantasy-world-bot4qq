@@ -2,8 +2,10 @@ from server.base_params import StatusBase
 from server.default_params import Tower
 from server.util import gen_ico
 
+
 class Attribute:
-    def __init__(self, blood_max=0, mana_max=0, attack=0, defense=0, speed=0, critical_strike=0, critical_damage=0, defense_strike=0, hurt_percentage_add=0, attack_percentage_add=0, defense_percentage_add=0):
+    def __init__(self, blood_max=0, mana_max=0, attack=0, defense=0, speed=0, critical_strike=0, critical_damage=0,
+                 defense_strike=0, hurt_percentage_add=0, attack_percentage_add=0, defense_percentage_add=0):
         self.blood_max = blood_max
         self.mana_max = mana_max
         self.attack = attack
@@ -15,8 +17,6 @@ class Attribute:
         self.hurt_percentage_add = hurt_percentage_add
         self.defense_percentage_add = defense_percentage_add
         self.attack_percentage_add = attack_percentage_add
-
-
 
 
 class CombatPojo:
@@ -78,8 +78,10 @@ class UserCombatPojo(CombatPojo):
             self.current_mana = current_mana
         if self.current_mana < 0:
             self.current_mana = 0
-        self.attack = (StatusBase.attack_base * user_level + add_attribute.attack) * (1 + add_attribute.attack_percentage_add)
-        self.defense = (StatusBase.defense_base * user_level + add_attribute.defense) * (1 + add_attribute.defense_percentage_add)
+        self.attack = (StatusBase.attack_base * user_level + add_attribute.attack) * (
+                    1 + add_attribute.attack_percentage_add)
+        self.defense = (StatusBase.defense_base * user_level + add_attribute.defense) * (
+                    1 + add_attribute.defense_percentage_add)
         self.speed = StatusBase.speed_base + add_attribute.speed
         self.critical_strike = StatusBase.critical_strike_base + add_attribute.critical_strike
         self.critical_damage = StatusBase.critical_damage_base + add_attribute.critical_damage

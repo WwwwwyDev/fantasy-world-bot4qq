@@ -103,7 +103,7 @@ def user_attack(params: list, user: User) -> str:
     me.current_blood = me.blood_max
     me.current_mana = me.mana_max
     another = get_user_attack_pojo(another_user)
-    _, res_content, attack_result = CombatService.attack(me, another, user.get_id())
+    _, res_content, attack_result, _ = CombatService.attack(me, another, user.get_id())
     return head("战斗报告") + res_content + separate("战斗结果") + attack_result
 
 

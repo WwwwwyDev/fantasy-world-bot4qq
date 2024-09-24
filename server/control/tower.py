@@ -1,3 +1,4 @@
+import math
 import time
 import random
 
@@ -18,7 +19,7 @@ def tower_info(params: list, user: User) -> str:
     return head(f"幻塔第{filter_num(user.tower_level)}层信息") + f"""[小怪] {combat_tower_pojo.name}
 [精英怪] 变异的{combat_tower_pojo.name}
 [首领] {combat_tower_pojo.name}王""" + separate(f"首领属性") + CombatService.get_attribute_content(
-        combat_tower_pojo)+f"\n[战斗力] {filter_num(CombatService.get_combat_score(combat_tower_pojo))}"
+        combat_tower_pojo) + f"\n[战斗力] {filter_num(CombatService.get_combat_score(combat_tower_pojo))}"
 
 
 def tower_balance(params: list, user: User) -> str:
@@ -34,15 +35,9 @@ def tower_balance(params: list, user: User) -> str:
     coin_add = user.coin_add_cnt * 0.01
     exp_num = int((normal_total_num * user.tower_level + advanced_total_num * user.tower_level * 3) * (1 + exp_add))
     coin = int(((advanced_total_num + normal_total_num) * user.tower_level) * (1 + coin_add))
-    total_cnt = m // 5 * 2
-    if user.tower_level >= 10000:
-        total_cnt = m // 5 * 8
-    elif user.tower_level >= 1000:
-        total_cnt = m // 5 * 6
-    elif user.tower_level >= 100:
-        total_cnt = m // 5 * 4
+    total_cnt = (m // 5) * math.ceil(user.tower_level / 1000)
     tower_monster_dropping, tower_monster_dropping_p = ItemService.get_tower_monster_dropping_items_list()
-    equip_dropping, equip_dropping_p = ItemService.get_equip_dropping_items_list()
+    equip_dropping, equip_dropping_p = ItemService.get_tower_boss_dropping_items_list()
     normal_items: list[Item] = make_decision_list(tower_monster_dropping, tower_monster_dropping_p, total_cnt)
     equip_items: list[Item] = make_decision_list(equip_dropping, equip_dropping_p, total_cnt // 2)
     items = [*normal_items, *equip_items]
@@ -83,17 +78,11 @@ def tower_wipe_delay(user: User) -> str:
     coin_add = user.coin_add_cnt * 0.01
     exp_num = int((normal_total_num * user.tower_level + advanced_total_num * user.tower_level * 3) * (1 + exp_add))
     coin = int(((advanced_total_num + normal_total_num) * user.tower_level) * (1 + coin_add))
-    total_cnt = 2
-    if user.tower_level >= 10000:
-        total_cnt = 8
-    elif user.tower_level >= 1000:
-        total_cnt = 6
-    elif user.tower_level >= 100:
-        total_cnt = 4
+    total_cnt = 2 + math.ceil(user.tower_level / 1000)
     tower_monster_dropping, tower_monster_dropping_p = ItemService.get_tower_monster_dropping_items_list()
-    equip_dropping, equip_dropping_p = ItemService.get_equip_dropping_items_list()
+    equip_dropping, equip_dropping_p = ItemService.get_tower_boss_dropping_items_list()
     normal_items: list[Item] = make_decision_list(tower_monster_dropping, tower_monster_dropping_p, total_cnt)
-    equip_items: list[Item] = make_decision_list(equip_dropping, equip_dropping_p, total_cnt//2)
+    equip_items: list[Item] = make_decision_list(equip_dropping, equip_dropping_p, total_cnt // 2)
     items = [*normal_items, *equip_items]
     item_get_mp = {}
     for item in items:
@@ -121,11 +110,14 @@ def tower_attack(params: list, user: User) -> str:
         return "血量为0，无法挑战"
     tmcp = TowerMonsterCombatPojo(user.tower_level)
     ucp = util.get_user_attack_pojo(user)
-    is_win, res_content, attack_result = CombatService.attack(ucp, tmcp, user.get_id())
+    is_win, res_content, attack_result, total = CombatService.attack(ucp, tmcp, user.get_id())
     add_content = ""
+    get_exp_cnt = 0
+    get_coin_cnt = 0
     if is_win:
-        equip_dropping, equip_dropping_p = ItemService.get_equip_dropping_items_list()
-        items: list[Item] = make_decision_list(equip_dropping, equip_dropping_p, max(user.tower_level // 100,1))
+        tower_boss_dropping, tower_boss_dropping_p = ItemService.get_tower_boss_dropping_items_list()
+        items: list[Item] = make_decision_list(tower_boss_dropping, tower_boss_dropping_p,
+                                               max(user.tower_level // 100, 1))
         item_get_mp = {}
         for item in items:
             if item:
@@ -140,8 +132,14 @@ def tower_attack(params: list, user: User) -> str:
         get_content = ""
         for item, cnt in item_get_mp.items():
             get_content += f"{item.name}:{cnt}个 "
-        UserService.update_user(user.get_id(), {"$set": {"bag": user.bag}, "$inc": {"tower_level": 1}})
-        add_content = f"成功进入第{filter_num(user.tower_level + 1)}层\n[获得物品] {get_content if get_content else '空空如也'}"
-    UserService.update_user(user.get_id(),
-                            {"$set": {"blood": max(ucp.current_blood, 0), "mana": max(ucp.current_mana, 0)}})
+        get_exp_cnt = int(200 * user.tower_level * (1 + user.exp_add_cnt / 100))
+        get_coin_cnt = int(150 * user.tower_level * (1 + user.coin_add_cnt / 100))
+        add_content = f"成功进入第{filter_num(user.tower_level + 1)}层\n[获得经验] {get_exp_cnt}\n[获得金币] {get_coin_cnt}\n[获得物品] {get_content if get_content else '空空如也'}"
+    if is_win:
+        UserService.update_user(user.get_id(), {
+            "$set": {"bag": user.bag, "blood": max(ucp.current_blood, 0), "mana": max(ucp.current_mana, 0)},
+            "$inc": {"tower_level": 1, "exp": get_exp_cnt, "coin": get_coin_cnt}})
+    else:
+        UserService.update_user(user.get_id(),
+                                {"$set": {"blood": max(ucp.current_blood, 0), "mana": max(ucp.current_mana, 0)}})
     return head("战斗报告") + res_content + separate("战斗结果") + attack_result + add_content

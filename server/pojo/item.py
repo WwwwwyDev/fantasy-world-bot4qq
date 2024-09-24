@@ -72,22 +72,22 @@ class StatusAdd:
         if self.blood_max:
             content += f"最大血量加成: {filter_num(self.blood_max)}"
             if bs_level > 0:
-                content += f" + {filter_num(int(bs_level * self.blood_max * bs_rate))}"
+                content += f"+{filter_num(int(bs_level * self.blood_max * bs_rate))}"
             content += "\n"
         if self.mana_max:
             content += f"最大魔力加成: {filter_num(self.mana_max)}"
             if bs_level > 0:
-                content += f" + {filter_num(int(bs_level * self.mana_max * bs_rate))}"
+                content += f"+{filter_num(int(bs_level * self.mana_max * bs_rate))}"
             content += "\n"
         if self.attack:
             content += f"攻击加成: {filter_num(self.attack)}"
             if bs_level > 0:
-                content += f" + {filter_num(int(bs_level * self.attack * bs_rate))}"
+                content += f"+{filter_num(int(bs_level * self.attack * bs_rate))}"
             content += "\n"
         if self.defense:
             content += f"防御加成: {filter_num(self.defense)}"
             if bs_level > 0:
-                content += f" + {filter_num(int(bs_level * self.defense * bs_rate))}"
+                content += f"+{filter_num(int(bs_level * self.defense * bs_rate))}"
             content += "\n"
         if self.critical_strike:
             content += f"暴击率加成: {int(self.critical_strike * 100)}%\n"
@@ -97,7 +97,7 @@ class StatusAdd:
         if self.critical_damage:
             content += f"暴击伤害加成: {filter_num(int(self.critical_damage * 100))}%"
             if bs_level > 0:
-                content += f" + {filter_num(int(bs_level * self.critical_damage * bs_rate * 100))}%"
+                content += f"+{filter_num(int(bs_level * self.critical_damage * bs_rate * 100))}%"
             content += "\n"
         if self.speed:
             content += f"速度加成: {self.speed}\n"
@@ -106,9 +106,15 @@ class StatusAdd:
         if self.hurt_percentage_add:
             content += f"伤害加成: {int(self.hurt_percentage_add*100)}%\n"
         if self.attack_percentage_add:
-            content += f"攻击百分比加成: {int(self.attack_percentage_add*100)}%\n"
+            content += f"攻击百分比加成: {int(self.attack_percentage_add*100)}%"
+            if bs_level > 0:
+                content += f"+{int(bs_level * self.attack_percentage_add * bs_rate * 100)}%"
+            content += "\n"
         if self.defense_percentage_add:
-            content += f"防御百分比加成: {int(self.defense_percentage_add*100)}%\n"
+            content += f"防御百分比加成: {int(self.defense_percentage_add*100)}%"
+            if bs_level > 0:
+                content += f"+{int(bs_level * self.defense_percentage_add * bs_rate * 100)}%"
+            content += "\n"
             # if bs_level > 0:
             #     content += f" + {int(bs_level * self.speed * bs_rate)}"
             # content += "\n"
