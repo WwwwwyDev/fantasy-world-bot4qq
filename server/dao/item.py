@@ -195,15 +195,15 @@ equip_items = [ItemEquip("EQ1", "树棍", "地上捡的树枝做的棍子", 1000
                ItemEquip("EQ6", "薰衣草护符", "用薰衣草做的护符，有一股淡淡的清香", 100000, 5,
                          StatusAdd(critical_strike=0.05, critical_damage=0.2, speed=1)),
                ItemEquip("EQ7", "法棍", "怎么可以拿面包做武器！", 10000,  0, StatusAdd(attack=100)),
-               ItemEquip("EQ8", "勇者剑", "传说中的勇者用过的剑", 10000000, 0,
+               ItemEquip("EQ8", "勇者剑", "传说中的勇者用过的剑", 100000000, 0,
                          StatusAdd(attack=2000, critical_strike=0.5, critical_damage=2, hurt_percentage_add=0.2, attack_percentage_add=0.5)),
-               ItemEquip("EQ9", "勇者盔", "传说中的勇者戴过的头盔", 10000000, 1, StatusAdd(defense=500, defense_percentage_add=0.05)),
-               ItemEquip("EQ10", "勇者上装", "传说中的勇者穿过的衣服", 10000000,  2,
-                         StatusAdd(defense=1000, blood_max=5000, defense_percentage_add=0.1)),
-               ItemEquip("EQ11", "勇者下装", "传说中的勇者穿过的裤子", 10000000,  3, StatusAdd(defense=500, defense_percentage_add=0.1, mana_max=1000)),
-               ItemEquip("EQ12", "勇者鞋", "传说中的勇者穿过的鞋子", 10000000,  4, StatusAdd(speed=20, defense=200, defense_percentage_add=0.05)),
-               ItemEquip("EQ13", "女神护符", "传说中女神赐予勇者的护符", 100000000,  5,
-                         StatusAdd(critical_strike=0.3, critical_damage=1, speed=10, defense_strike=0.2)),
+               ItemEquip("EQ9", "勇者盔", "传说中的勇者戴过的头盔", 100000000, 1, StatusAdd(defense=500, defense_percentage_add=0.05, blood_max_percentage_add=0.05)),
+               ItemEquip("EQ10", "勇者上装", "传说中的勇者穿过的衣服", 100000000,  2,
+                         StatusAdd(defense=1000, blood_max=5000, defense_percentage_add=0.1, blood_max_percentage_add=0.1)),
+               ItemEquip("EQ11", "勇者下装", "传说中的勇者穿过的裤子", 100000000,  3, StatusAdd(defense=500, defense_percentage_add=0.1, mana_max=1000, blood_max_percentage_add=0.05)),
+               ItemEquip("EQ12", "勇者鞋", "传说中的勇者穿过的鞋子", 100000000,  4, StatusAdd(speed=20, defense=200, defense_percentage_add=0.05, blood_max_percentage_add=0.05)),
+               ItemEquip("EQ13", "女神护符", "传说中女神赐予勇者的护符", 200000000,  5,
+                         StatusAdd(critical_strike=0.3, critical_damage=1, speed=10, defense_strike=0.2, mana_max_percentage_add=0.1)),
                ItemEquip("EQ14", "神剑", "只有神才能用的剑🗡️上面充满着神秘的气息", 500000000, 0,
                          StatusAdd(attack=5000, critical_strike=8, critical_damage=4, hurt_percentage_add=0.5, attack_percentage_add=1)),
                ItemEquip("EQ15", "雷霆枪", "蕴含雷霆神力的枪", 500000, 0,
@@ -246,10 +246,10 @@ for i in range(len(tower_monster_dropping)):
 tower_boss_dropping = [*copy.deepcopy(equip_items), *copy.deepcopy(skill_items)]
 tower_boss_dropping_p = []
 for item_temp in tower_boss_dropping:
-    tower_boss_dropping_p.append(5/item_temp.price)
-
-print(sum(tower_boss_dropping_p))
-print(sum(tower_monster_dropping_p))
+    tower_boss_dropping_p.append(3/item_temp.price)
+#
+# print(sum(tower_boss_dropping_p))
+# print(sum(tower_monster_dropping_p))
 
 
 

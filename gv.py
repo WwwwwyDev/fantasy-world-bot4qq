@@ -10,6 +10,7 @@ class Global:
     mongo_db = mongo_client[config['mongodb']['database']]
     user_c = mongo_db["user"]
     combat_c = mongo_db["combat"]
+    cache_c = mongo_db["cache"]
 
 
 if __name__ == "__main__":

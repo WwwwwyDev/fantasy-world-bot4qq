@@ -1,4 +1,7 @@
+import time
+import threading
 from botpy.types.message import Ark, ArkKv
+import schedule
 
 from gv import Global
 import botpy
@@ -6,9 +9,11 @@ from botpy import logging
 from botpy.message import GroupMessage
 from botpy.manage import GroupManageEvent
 from server import work_message, work_delay_command
+from server.task import rank_task, every_day_task
 import asyncio
 
 from server.error import LFError
+from server.util import white_code
 
 _log = logging.get_logger()
 config = Global.config
@@ -70,8 +75,22 @@ class FLClient(botpy.Client):
         #     ark=payload,)
         await work(message)
 
+def schedule_work():
+    schedule.clear()
+    schedule.every().hour.at(":00").do(rank_task)
+    schedule.every().day.at("04:00").do(every_day_task)
+    # schedule.run_all()
+    while True:
+        schedule.run_pending()
+        time.sleep(1)
+
+def run_schedule_thread():
+    job_thread = threading.Thread(target=schedule_work)
+    job_thread.daemon = True
+    job_thread.start()
 
 if __name__ == "__main__":
     intents = botpy.Intents(public_messages=True)
     client = FLClient(intents=intents, is_sandbox=True)
+    run_schedule_thread()
     client.run(appid=str(config["appid"]), secret=str(config["secret"]))

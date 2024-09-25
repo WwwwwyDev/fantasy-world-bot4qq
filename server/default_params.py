@@ -30,6 +30,10 @@ def get_default_user(_id, name):
             "last_bank_balance": int(time.time()),
             "bank_coin": 0,
             "bank_level": 0,
+            "weapon_stone_fairyland": False,
+            "coin_fairyland": False,
+            "exp_fairyland": False,
+            "god_fairyland": False
             }
 
 

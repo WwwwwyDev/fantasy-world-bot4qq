@@ -23,6 +23,26 @@ def user_info(params: list, user: User) -> str:
 [技能] {user.skill["name"] if user.skill["name"] else "未学习"}
 """
 
+def see_other_user_info(params: list, user: User) -> str:
+    if len(params) < 1:
+        return "指令错误，请输入冒险者名字"
+    user_name = params[0]
+    another_user = UserService.get_user_by_name_with_up(user_name)
+    if not another_user:
+        return f"冒险者\"{user_name}\"不存在"
+    user = another_user
+    return head("冒险者信息") + f"""[昵称] {user.name}
+[等级] {filter_num(user.level)}
+[幻塔层数] 第{filter_num(user.tower_level)}层""" + separate(
+        "装备与技能") + f"""[武器+{user.weapon_level}] {user.weapon_equip["name"] if user.weapon_equip["name"] else "未装备"}
+[头盔+{user.head_level}] {user.head_equip["name"] if user.head_equip["name"] else "未装备"}
+[上装+{user.body_level}] {user.body_equip["name"] if user.body_equip["name"] else "未装备"}
+[下装+{user.pants_level}] {user.pants_equip["name"] if user.pants_equip["name"] else "未装备"}
+[鞋子+{user.foot_level}] {user.foot_equip["name"] if user.foot_equip["name"] else "未装备"}
+[护符+{user.talisman_level}] {user.talisman_equip["name"] if user.talisman_equip["name"] else "未装备"}
+[技能] {user.skill["name"] if user.skill["name"] else "未学习"}
+"""
+
 
 def user_equip(params: list, user: User) -> str:
     content = head("我的装备")
@@ -92,7 +112,7 @@ def user_update(params: list, user: User) -> (str, bool):
 
 def user_attack(params: list, user: User) -> str:
     if len(params) < 1:
-        return "指令错误"
+        return "指令错误，请输入冒险者名字"
     user_name = params[0]
     if user.name == user_name:
         return "无法与自己切磋"

@@ -23,7 +23,7 @@ def normal_attack(pojo_proactive: CombatPojo, pojo_reactive: CombatPojo) -> (str
 
 class CombatService:
     @staticmethod
-    def attack_one(pojo_proactive: CombatPojo, pojo_reactive: CombatPojo) -> (str, int):
+    def _attack_one(pojo_proactive: CombatPojo, pojo_reactive: CombatPojo) -> (str, int):
         if pojo_proactive.skill_callback and pojo_proactive.current_mana > 0:
             content, is_happen, base_attack = pojo_proactive.skill_callback(pojo_proactive, pojo_reactive)
             if is_happen:
@@ -34,7 +34,7 @@ class CombatService:
             return normal_attack(pojo_proactive, pojo_reactive)
 
     @staticmethod
-    def attack(pojo1: CombatPojo, pojo2: CombatPojo, user_id: str) -> (bool, str, str, int):
+    def attack(pojo1: CombatPojo, pojo2: CombatPojo, user_id: str = "") -> (bool, str, str, int):
         max_attack = 30  # 最大回合数
         current_attack = 1
         record_content_list = []
@@ -46,28 +46,28 @@ class CombatService:
         while pojo1.current_blood > 0 and pojo2.current_blood > 0 and max_attack:
             add_content = ""
             if pojo1.speed > pojo2.speed:
-                temp_content, base_attack = CombatService.attack_one(pojo1, pojo2)
+                temp_content, base_attack = CombatService._attack_one(pojo1, pojo2)
                 total_attack += base_attack
                 add_content += temp_content
             elif pojo2.speed > pojo1.speed:
-                add_content += CombatService.attack_one(pojo2, pojo1)[0]
+                add_content += CombatService._attack_one(pojo2, pojo1)[0]
             else:
                 if f:
                     if f == 1:
-                        add_content += CombatService.attack_one(pojo2, pojo1)[0]
+                        add_content += CombatService._attack_one(pojo2, pojo1)[0]
                     else:
-                        temp_content, base_attack = CombatService.attack_one(pojo1, pojo2)
+                        temp_content, base_attack = CombatService._attack_one(pojo1, pojo2)
                         total_attack += base_attack
                         add_content += temp_content
                     f = 0
                 else:
                     if make_decision(0.5):
-                        temp_content, base_attack = CombatService.attack_one(pojo1, pojo2)
+                        temp_content, base_attack = CombatService._attack_one(pojo1, pojo2)
                         total_attack += base_attack
                         add_content += temp_content
                         f = 1
                     else:
-                        add_content += CombatService.attack_one(pojo2, pojo1)[0]
+                        add_content += CombatService._attack_one(pojo2, pojo1)[0]
                         f = 2
             pojo1.speed -= min_speed
             pojo2.speed -= min_speed
@@ -94,7 +94,8 @@ class CombatService:
             attack_result = f"{pojo1.name}获胜!"
             is_win = True
         record_content_list.append(attack_result)
-        CombatDao.record_combat(record_content_list, user_id)
+        if user_id:
+            CombatDao.record_combat(record_content_list, user_id)
         return is_win, res_content, attack_result, total_attack
 
     @staticmethod

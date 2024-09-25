@@ -5,7 +5,7 @@ from server.util import gen_ico
 
 class Attribute:
     def __init__(self, blood_max=0, mana_max=0, attack=0, defense=0, speed=0, critical_strike=0, critical_damage=0,
-                 defense_strike=0, hurt_percentage_add=0, attack_percentage_add=0, defense_percentage_add=0):
+                 defense_strike=0, hurt_percentage_add=0, attack_percentage_add=0, defense_percentage_add=0, blood_max_percentage_add=0, mana_max_percentage_add=0):
         self.blood_max = blood_max
         self.mana_max = mana_max
         self.attack = attack
@@ -17,6 +17,9 @@ class Attribute:
         self.hurt_percentage_add = hurt_percentage_add
         self.defense_percentage_add = defense_percentage_add
         self.attack_percentage_add = attack_percentage_add
+        self.attack_percentage_add = attack_percentage_add
+        self.blood_max_percentage_add = blood_max_percentage_add
+        self.mana_max_percentage_add = mana_max_percentage_add
 
 
 class CombatPojo:
@@ -58,20 +61,37 @@ class TowerMonsterCombatPojo(CombatPojo):
             self.hurt_percentage_add = 0
 
 
+class SeaMonsterCombatPojo(CombatPojo):
+
+    def __init__(self, name: str, speed):
+        super().__init__()
+        self.name = name
+        self.current_blood = 100000000000000000
+        self.blood_max = self.current_blood
+        self.current_mana = 100000000000000000
+        self.mana_max = self.current_mana
+        self.attack = 100000000000000000
+        self.defense = 0
+        self.speed = speed
+        self.critical_strike = 0
+        self.critical_damage = 0
+        self.defense_strike = 0
+        self.hurt_percentage_add = 0
+
 class UserCombatPojo(CombatPojo):
 
     def __init__(self, user_name: str, user_level: int, current_blood: int, current_mana: int, add_attribute: Attribute,
                  skill_callback: callable = None):
         super().__init__()
         self.name = user_name
-        self.blood_max = StatusBase.blood_base * user_level + add_attribute.blood_max
+        self.blood_max = int((StatusBase.blood_base * user_level + add_attribute.blood_max) * (1 + add_attribute.blood_max_percentage_add))
         if current_blood > self.blood_max:
             self.current_blood = self.blood_max
         else:
             self.current_blood = current_blood
         if self.current_blood < 0:
             self.current_blood = 0
-        self.mana_max = StatusBase.mana_base * user_level + add_attribute.mana_max
+        self.mana_max = int((StatusBase.mana_base * user_level + add_attribute.mana_max) * (1 + add_attribute.mana_max_percentage_add))
         if current_mana > self.mana_max:
             self.current_mana = self.mana_max
         else:

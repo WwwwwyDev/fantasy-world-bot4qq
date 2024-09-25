@@ -41,7 +41,7 @@ class ItemSkill(Item):
 
 class StatusAdd:
 
-    def __init__(self, blood_max=0, mana_max=0, attack=0, defense=0, critical_strike=0, critical_damage=0, speed=0, defense_strike=0, hurt_percentage_add=0, defense_percentage_add=0, attack_percentage_add=0):
+    def __init__(self, blood_max=0, mana_max=0, attack=0, defense=0, critical_strike=0, critical_damage=0, speed=0, defense_strike=0, hurt_percentage_add=0, defense_percentage_add=0, attack_percentage_add=0, blood_max_percentage_add=0, mana_max_percentage_add=0):
         """
         :param blood_max: 最大血量加成
         :param mana_max: 最大魔法值加成
@@ -54,6 +54,8 @@ class StatusAdd:
         :param hurt_percentage_add: 伤害加成
         :param defense_percentage_add: 防御百分比加成
         :param attack_percentage_add: 攻击百分比加成
+        :param blood_max_percentage_add: 生命百分比加成
+        :param mana_max_percentage_add: 魔力百分比加成
         """
         self.blood_max = blood_max
         self.mana_max = mana_max
@@ -66,6 +68,8 @@ class StatusAdd:
         self.hurt_percentage_add = hurt_percentage_add
         self.defense_percentage_add = defense_percentage_add
         self.attack_percentage_add = attack_percentage_add
+        self.blood_max_percentage_add = blood_max_percentage_add
+        self.mana_max_percentage_add = mana_max_percentage_add
 
     def get_desc(self, bs_level: int = 0):
         content = ""
@@ -105,6 +109,16 @@ class StatusAdd:
             content += f"抗暴加成: {int(self.defense_strike*100)}%\n"
         if self.hurt_percentage_add:
             content += f"伤害加成: {int(self.hurt_percentage_add*100)}%\n"
+        if self.blood_max_percentage_add:
+            content += f"血量上限百分比加成: {int(self.blood_max_percentage_add * 100)}%"
+            if bs_level > 0:
+                content += f"+{int(bs_level * self.blood_max_percentage_add * bs_rate * 100)}%"
+            content += "\n"
+        if self.mana_max_percentage_add:
+            content += f"魔力上限百分比加成: {int(self.mana_max_percentage_add * 100)}%"
+            if bs_level > 0:
+                content += f"+{int(bs_level * self.mana_max_percentage_add * bs_rate * 100)}%"
+            content += "\n"
         if self.attack_percentage_add:
             content += f"攻击百分比加成: {int(self.attack_percentage_add*100)}%"
             if bs_level > 0:

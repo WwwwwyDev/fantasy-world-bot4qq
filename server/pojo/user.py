@@ -29,6 +29,10 @@ class User:
         self.last_bank_balance = int(mongo_dict["last_bank_balance"])
         self.bank_coin = int(mongo_dict["bank_coin"])
         self.bank_level = int(mongo_dict["bank_level"])
+        self.weapon_stone_fairyland = mongo_dict["weapon_stone_fairyland"]
+        self.coin_fairyland = mongo_dict["coin_fairyland"]
+        self.exp_fairyland = mongo_dict["exp_fairyland"]
+        self.god_fairyland = mongo_dict["god_fairyland"]
         self.mongo_dict = mongo_dict
 
     def get_id(self):
