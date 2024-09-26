@@ -42,7 +42,7 @@ def N10(user: User, user_combat_pojo: CombatPojo, cnt: int) -> (str, int):
     return f"提升了{filter_num(cnt)}%金币加成", cnt
 
 def N3(user: User, user_combat_pojo: CombatPojo, cnt: int) -> (str, int):
-    add_blood = (user_combat_pojo.blood_max * 0.1) * cnt
+    add_blood = int(user_combat_pojo.blood_max * 0.1) * cnt
     current_blood = user.blood
     if current_blood == user_combat_pojo.blood_max:
         return "你的生命已满，无需使用生命药剂", 0
@@ -60,7 +60,7 @@ def N3(user: User, user_combat_pojo: CombatPojo, cnt: int) -> (str, int):
 
 
 def N4(user: User, user_combat_pojo: CombatPojo, cnt: int) -> (str, int):
-    add_mana = (user_combat_pojo.mana_max * 0.1) * cnt
+    add_mana = int(user_combat_pojo.mana_max * 0.1) * cnt
     current_mana = user.mana
     if current_mana == user_combat_pojo.mana_max:
         return "你的魔力已满，无需使用魔力药剂", 0
@@ -78,7 +78,7 @@ def N4(user: User, user_combat_pojo: CombatPojo, cnt: int) -> (str, int):
 
 
 def N5(user: User, user_combat_pojo: CombatPojo, cnt: int) -> (str, int):
-    add_blood = (user_combat_pojo.blood_max * 0.3) * cnt
+    add_blood = int(user_combat_pojo.blood_max * 0.3) * cnt
     current_blood = user.blood
     if current_blood == user_combat_pojo.blood_max:
         return "你的生命已满，无需使用生命药剂", 0
@@ -96,7 +96,7 @@ def N5(user: User, user_combat_pojo: CombatPojo, cnt: int) -> (str, int):
 
 
 def N6(user: User, user_combat_pojo: CombatPojo, cnt: int) -> (str, int):
-    add_mana = (user_combat_pojo.mana_max * 0.3) * cnt
+    add_mana = int(user_combat_pojo.mana_max * 0.3) * cnt
     current_mana = user.mana
     if current_mana == user_combat_pojo.mana_max:
         return "你的魔力已满，无需使用魔力药剂", 0
@@ -114,7 +114,7 @@ def N6(user: User, user_combat_pojo: CombatPojo, cnt: int) -> (str, int):
 
 
 def N7(user: User, user_combat_pojo: CombatPojo, cnt: int) -> (str, int):
-    add_blood = (user_combat_pojo.blood_max * 0.7) * cnt
+    add_blood = int(user_combat_pojo.blood_max * 0.7) * cnt
     current_blood = user.blood
     if current_blood == user_combat_pojo.blood_max:
         return "你的生命已满，无需使用生命药剂", 0
@@ -132,7 +132,7 @@ def N7(user: User, user_combat_pojo: CombatPojo, cnt: int) -> (str, int):
 
 
 def N8(user: User, user_combat_pojo: CombatPojo, cnt: int) -> (str, int):
-    add_mana = (user_combat_pojo.mana_max * 0.7) * cnt
+    add_mana = int(user_combat_pojo.mana_max * 0.7) * cnt
     current_mana = user.mana
     if current_mana == user_combat_pojo.mana_max:
         return "你的魔力已满，无需使用魔力药剂", 0
