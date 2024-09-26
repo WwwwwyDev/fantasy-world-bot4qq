@@ -23,6 +23,9 @@ def user_info(params: list, user: User) -> str:
 [技能] {user.skill["name"] if user.skill["name"] else "未学习"}
 """
 
+def see_coin(params: list, user: User) -> str:
+    return f"金币💰:{filter_num(user.coin)}"
+
 def see_other_user_info(params: list, user: User) -> str:
     if len(params) < 1:
         return "指令错误，请输入冒险者名字"

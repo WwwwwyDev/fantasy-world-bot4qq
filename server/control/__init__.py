@@ -1,7 +1,7 @@
 from server.pojo.user import User
 from server.control.help import help_menu, adventure_menu, tower_menu, store_menu, forge_menu, bank_menu, rank_menu, sea_menu, new_help
 from server.control.user import (user_info, user_update, user_id, user_attribute, user_attack, last_attack_record,
-                                 change_name, user_bag, user_equip, see_other_user_info)
+                                 change_name, user_bag, user_equip, see_other_user_info, see_coin)
 from server.control.tower import tower_info, tower_balance, tower_wipe, tower_wipe_delay, tower_attack
 from server.control.item import see_item, use_normal_item, use_skill_item, use_equip_item, off_equip_item, sale_item
 from server.control.store import see_store, buy_item
@@ -44,6 +44,7 @@ command_mp = {
     "出售": sale_item,
     "强化": strengthen_equip,
     "查看冒险者": see_other_user_info,
+    "查看金币": see_coin,
     "查看幻行": see_bank,
     "幻行存金币": set_bank_coin,
     "幻行取金币": get_bank_coin,
