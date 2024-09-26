@@ -91,6 +91,6 @@ def run_schedule_thread():
 
 if __name__ == "__main__":
     intents = botpy.Intents(public_messages=True)
-    client = FLClient(intents=intents, is_sandbox=True)
+    client = FLClient(intents=intents)
     run_schedule_thread()
     client.run(appid=str(config["appid"]), secret=str(config["secret"]))
