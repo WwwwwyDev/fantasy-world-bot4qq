@@ -10,7 +10,7 @@ equip_mp = {
     "上装": "body_level",
     "下装": "pants_level",
     "鞋子": "foot_level",
-    "护符": "talisman_level",
+    "饰品": "talisman_level",
 }
 
 equip_name_mp = {
@@ -19,7 +19,7 @@ equip_name_mp = {
     "body_equip": "上装",
     "pants_equip": "下装",
     "foot_equip": "鞋子",
-    "talisman_equip": "护符"
+    "talisman_equip": "饰品"
 }
 
 equip_level_mp = {

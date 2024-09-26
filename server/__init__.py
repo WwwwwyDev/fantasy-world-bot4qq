@@ -7,7 +7,7 @@ async def work_message(user_id: str, content: str) -> (str, bool):
     user = UserService.get_user_by_id_with_up(user_id)
     if content == "开始冒险" and not user:
         name = UserService.register(user_id)
-        return f"恭喜{name}成为冒险者", False
+        return f"欢迎来到幻想世界，恭喜{name}成为冒险者，并获得了一个新手礼包", False
     if content == "开始冒险" and user:
         return "你已经是冒险者了", False
     if not user:

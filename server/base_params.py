@@ -4,7 +4,7 @@ bs_rate = 0.15  # 强化基准加成倍率
 
 class StatusBase:
     blood_base = 500  # 血量
-    mana_base = 35  # 魔力
+    mana_base = 30  # 魔力
     attack_base = 50  # 攻击力
     defense_base = 30  # 防御力
     critical_strike_base = 0.1  # 暴击率

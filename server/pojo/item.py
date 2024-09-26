@@ -135,7 +135,7 @@ class StatusAdd:
         return content[:-1]
 
 
-position_mp = ["武器", "头盔", "上装", "下装", "鞋子", "护符"]
+position_mp = ["武器", "头盔", "上装", "下装", "鞋子", "饰品"]
 
 
 class ItemEquip(Item):

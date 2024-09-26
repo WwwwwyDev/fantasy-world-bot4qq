@@ -111,9 +111,9 @@ class CombatService:
 [伤害加成] {filter_num(int(attribute.hurt_percentage_add * 100))}%"""
 
     @staticmethod
-    def get_combat_score(attribute: CombatPojo):
+    def get_combat_score(attribute: CombatPojo) -> int:
         result_attack = attribute.attack * (1 + attribute.critical_damage)
-        return int(attribute.blood_max * 0.1 + attribute.mana_max * 0.1 + attribute.defense + attribute.speed * 10 + attribute.critical_strike * 1000 + result_attack)
+        return int(attribute.blood_max + attribute.mana_max * 16 + attribute.defense * 16 + attribute.speed * 50 + attribute.critical_strike * 5000 + attribute.defense_strike * 5000 + result_attack * 10)
 
     @staticmethod
     def get_combat_record(user_id: str) -> dict | None:

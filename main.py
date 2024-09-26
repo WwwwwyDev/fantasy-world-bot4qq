@@ -13,7 +13,7 @@ from server.task import rank_task, every_day_task
 import asyncio
 
 from server.error import LFError
-from server.util import white_code
+
 
 _log = logging.get_logger()
 config = Global.config
