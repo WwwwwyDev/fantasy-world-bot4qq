@@ -44,7 +44,7 @@ command_mp = {
     "出售": sale_item,
     "强化": strengthen_equip,
     "查看冒险者": see_other_user_info,
-    "查看金币": see_coin,
+    "金币": see_coin,
     "查看幻行": see_bank,
     "幻行存金币": set_bank_coin,
     "幻行取金币": get_bank_coin,
