@@ -74,7 +74,7 @@ def N4(user: User, user_combat_pojo: CombatPojo, cnt: int) -> (str, int):
         result = Global.user_c.update_one(filter={"_id": user.get_id()}, update={"$inc": {"mana": add_mana}})
         if result.matched_count == 0:
             raise LFError("[error] 数据库更新失败")
-        return f"恢复了{filter_num(add_mana)}点生命", cnt
+        return f"恢复了{filter_num(add_mana)}点魔力", cnt
 
 
 def N5(user: User, user_combat_pojo: CombatPojo, cnt: int) -> (str, int):
@@ -110,7 +110,7 @@ def N6(user: User, user_combat_pojo: CombatPojo, cnt: int) -> (str, int):
         result = Global.user_c.update_one(filter={"_id": user.get_id()}, update={"$inc": {"mana": add_mana}})
         if result.matched_count == 0:
             raise LFError("[error] 数据库更新失败")
-        return f"恢复了{filter_num(add_mana)}点生命", cnt
+        return f"恢复了{filter_num(add_mana)}点魔力", cnt
 
 
 def N7(user: User, user_combat_pojo: CombatPojo, cnt: int) -> (str, int):
@@ -146,7 +146,7 @@ def N8(user: User, user_combat_pojo: CombatPojo, cnt: int) -> (str, int):
         result = Global.user_c.update_one(filter={"_id": user.get_id()}, update={"$inc": {"mana": add_mana}})
         if result.matched_count == 0:
             raise LFError("[error] 数据库更新失败")
-        return f"恢复了{filter_num(add_mana)}点生命", cnt
+        return f"恢复了{filter_num(add_mana)}点魔力", cnt
 
 
 def N9(user: User, user_combat_pojo: CombatPojo, cnt: int) -> (str, int):
@@ -167,7 +167,7 @@ def N11(user: User, user_combat_pojo: CombatPojo, cnt: int) -> (str, int):
         "$set": {"bag": user.bag}, "$inc": {"coin": 1000000}})
     if result.matched_count == 0:
         raise LFError("[error] 数据库更新失败")
-    return f"开启新手礼包。获得了 50个经验丹，100个小生命药水，100个小魔力药水，100个强化石，1套新手套装以及{filter_num(1000000)}💰", 1
+    return f"开启新手礼包。获得了 50个经验药水，100个小生命药水，100个小魔力药水，100个强化石，1套新手套装以及{filter_num(1000000)}💰", 1
 
 
 def SK1(pojo_proactive: CombatPojo, pojo_reactive: CombatPojo) -> (str, bool, int):
