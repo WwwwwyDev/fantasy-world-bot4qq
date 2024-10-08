@@ -1,6 +1,8 @@
 import random
 import numpy as np
 from server.default_params import Tower
+import requests as req
+from error import LFError
 
 
 def make_decision(probability: float) -> bool:
@@ -136,5 +138,20 @@ def filter_num(num: int) -> str:
     return white_code.join(num_str[i:i + 4] for i in range(0, len(num_str), 4))
 
 
+def check_name(name: str) -> bool:
+    try:
+        resp = req.post("https://www.qianmoo.top/admin/sensitiveWord/detection",
+                        json={"context": name, "wordType": [1, 2, 3, 4, 99, 100]})
+    except:
+        raise LFError("敏感词数据库连接失败")
+    content = resp.json()
+    if content["code"] != 200:
+        raise LFError("敏感词数据库连接失败")
+    if content["data"]["wordNum"] != 0:
+        return False
+    else:
+        return True
+
+
 if __name__ == '__main__':
-    pass
+    print(check_name("我的世界"))
