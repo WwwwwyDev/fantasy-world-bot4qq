@@ -57,7 +57,8 @@ class FLClient(botpy.Client):
             group_openid=event.group_openid,
             msg_type=0,
             event_id=event.event_id,
-            content=f"robot 「{self.robot.name}」 on_ready!",
+            content=f"欢迎来到幻想世界！🌟
+亲爱的冒险者们，欢迎你们踏入这片充满奇迹与梦幻的土地！✨ 在这里，你可以尽情释放你的想象力，探索无尽的奇妙领域，与各种神秘生物相遇，展开一场场惊心动魄的冒险！💪",
         )
 
     async def on_group_at_message_create(self, message: GroupMessage):
