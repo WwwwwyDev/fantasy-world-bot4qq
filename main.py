@@ -23,10 +23,10 @@ async def work(message: GroupMessage):
     content = message.content.strip()
     try:
         resp, is_need_delay = await work_message(user_id=user_id, content=content)
-    except LFError:
-        resp = LFError.get_msg()
+    except LFError as lfe:
+        resp = lfe.get_msg()
         is_need_delay = False
-    except Exception:
+    except:
         resp = "后台异常"
         is_need_delay = False
     delay_time = 0
