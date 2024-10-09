@@ -1,7 +1,7 @@
 from server.base_params import max_exp_base
 from server.pojo.item import ItemEquip
 from server.pojo.user import User
-from server.util import head, separate, filter_num
+from server.util import head, separate, filter_num, check_name
 from server.service.combat import CombatService
 from server.service.user import UserService
 from server.service.item import ItemService
@@ -160,4 +160,20 @@ def last_attack_record(params: list, user: User) -> str:
 
 
 def change_name(params: list, user: User) -> str:
-    return "昵称改为:" + UserService.change_name(user.get_id())
+    if len(params) < 1:
+        return "指令错误，请输入你想要改的名字"
+    name = params[0]
+    if len(name) > 6:
+        return "昵称长度应小于等于6"
+    if "SP2" not in user.bag:
+        return "背包中没有改名卡"
+    if not check_name(name):
+        return "智能检测未通过，昵称中含有非法词"
+    if UserService.is_exist_name(name):
+        return "昵称重复"
+    user.bag["SP2"] -= 1
+    if user.bag["SP2"] == 0:
+        del user.bag["SP2"]
+    UserService.update_user(user.get_id(),
+                            {"$set": {"bag": user.bag, "name": name}})
+    return "消耗了一张改名卡，昵称改为:" + name

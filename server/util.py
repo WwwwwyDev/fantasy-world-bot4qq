@@ -2,7 +2,7 @@ import random
 import numpy as np
 from server.default_params import Tower
 import requests as req
-from error import LFError
+from server.error import LFError
 
 
 def make_decision(probability: float) -> bool:
