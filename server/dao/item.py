@@ -156,7 +156,7 @@ def N9(user: User, user_combat_pojo: CombatPojo, cnt: int) -> (str, int):
         raise LFError("[error] 数据库更新失败")
     return f"你的血量和魔力已回满", 1
 
-new_items = {"N1": 50, "N3": 100, "SP1": 100,"N4": 100, "EQ1": 1, "EQ2": 1, "EQ3": 1,"EQ4": 1, "EQ5": 1}
+new_items = {"N1": 50, "N3": 100, "SP1": 100, "SP2": 1, "N4": 100, "EQ1": 1, "EQ2": 1, "EQ3": 1,"EQ4": 1, "EQ5": 1}
 def N11(user: User, user_combat_pojo: CombatPojo, cnt: int) -> (str, int):
     for k, v in new_items.items():
         if k in user.bag:
@@ -167,7 +167,7 @@ def N11(user: User, user_combat_pojo: CombatPojo, cnt: int) -> (str, int):
         "$set": {"bag": user.bag}, "$inc": {"coin": 1000000}})
     if result.matched_count == 0:
         raise LFError("[error] 数据库更新失败")
-    return f"开启新手礼包。获得了 50个经验药水，100个小生命药水，100个小魔力药水，100个强化石，1套新手套装以及{filter_num(1000000)}💰", 1
+    return f"开启新手礼包。获得了 50个经验药水，100个小生命药水，100个小魔力药水，100个强化石，1套新手套装，一张改名卡以及{filter_num(1000000)}💰", 1
 
 
 def SK1(pojo_proactive: CombatPojo, pojo_reactive: CombatPojo) -> (str, bool, int):
