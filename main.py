@@ -65,18 +65,6 @@ class FLClient(botpy.Client):
         )
 
     async def on_group_at_message_create(self, message: GroupMessage):
-        # payload: Ark = Ark(
-        #     template_id=24,
-        #     kv=[
-        #         ArkKv(key="#DESC#", value="通知提醒"),
-        #         ArkKv(key="#PROMPT#", value="标题"),
-        #         ArkKv(key="#TITLE#", value="标题"),
-        #     ],
-        # )
-        # a = await self.api.post_group_message(
-        #     group_openid=message.group_openid,
-        #     msg_type=3,
-        #     ark=payload,)
         await work(message)
 
 def schedule_work():
