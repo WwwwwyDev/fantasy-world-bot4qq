@@ -1,7 +1,6 @@
 <!-- markdownlint-disable MD033 MD041 -->
 <p align="center">
-  <a href="https://github.com/WwwwwyDev/fantasy-world-bot4qq"><img src="https://s2.loli.net/2024/11/14/7LcfzE2tVZn1oXy.png" alt="fantasy-world-bot4qq" style="width:50%; height:50%" ></a>
-</p>
+  <a href="https://github.com/WwwwwyDev/fantasy-world-bot4qq"><img src="https://s2.loli.net/2024/11/14/7LcfzE2tVZn1oXy.png" alt="fantasy-world-bot4qq" style="width:30%; height:30%" ></a>
 
 <div align="center">
 
@@ -35,5 +34,5 @@
 6. 使用`nohup python main.py &`挂起服务器或使用Supervisor等管理工具进行管理
 
 ## 体验
-扫描二维码添加机器人到群聊在线体验
+扫描二维码添加机器人到群聊在线体验\
 ![二维码](./images/bot.png)
