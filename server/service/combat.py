@@ -20,7 +20,7 @@ def normal_attack(pojo_proactive: CombatPojo, pojo_reactive: CombatPojo) -> (str
     content += f"对{pojo_reactive.name}造成{filter_num(base_attack)}点伤害"
     return content, base_attack
 
-
+# 战斗服务
 class CombatService:
     @staticmethod
     def _attack_one(pojo_proactive: CombatPojo, pojo_reactive: CombatPojo) -> (str, int):
