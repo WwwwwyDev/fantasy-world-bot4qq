@@ -72,7 +72,7 @@ need_delay_command = {"幻塔扫荡", "/幻塔扫荡"}
 
 
 def main_control(command: str, params: list, user: User) -> (str, bool):
-    if command not in command_mp:
+    if command not in command_mp:  # 如果没有该命令， 则根据前缀进行匹配
         f = False
         for e in sorted_command:
             if command.startswith(e):
@@ -82,8 +82,8 @@ def main_control(command: str, params: list, user: User) -> (str, bool):
                 break
         if not f:
             return "没有该指令，请查看帮助菜单", False
-    if command in need_delay_command:
-        return command_mp[command](params, user), True
+    if command in need_delay_command:  # 如果是延迟命令，则执行延迟命令（会间隔一段时间发送两条消息）
+        return command_mp[command](params, user), True  # 第二个返回值为True，意味着过一段时间会执行第二条命令
     return command_mp[command](params, user), False
 
 
@@ -95,4 +95,4 @@ delay_command_mp = {
 def delay_control(command: str, user: User) -> str:
     if command not in delay_command_mp:
         return "延迟指令错误"
-    return delay_command_mp[command](user)
+    return delay_command_mp[command](user)  # 执行延迟命令
