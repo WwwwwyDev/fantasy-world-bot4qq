@@ -68,9 +68,11 @@ need_delay_command = {"幻塔扫荡", "/幻塔扫荡"}
 
 
 def main_control(command: str, params: list, user: User) -> (str, bool): 
-    handle = tree.search(command)
+    handle, cnt = tree.search(command)
     if not handle:
         return "没有该指令，请查看帮助菜单", False
+    if cnt != len(command):
+        params.insert(0, command[cnt:])
     if command in need_delay_command:  # 如果是延迟命令，则执行延迟命令（会间隔一段时间发送两条消息）
         return handle(params, user), True  # 第二个返回值为True，意味着过一段时间会执行第二条命令
     return handle(params, user), False
