@@ -29,6 +29,3 @@ async def work_delay_command(command: str, user_id: str) -> str:
     user = UserService.get_user_by_id_with_up(user_id)
     return delay_control(command, user)
 
-
-if __name__ == '__main__':
-    work_message("wwww", "22")
