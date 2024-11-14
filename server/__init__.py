@@ -24,7 +24,7 @@ async def work_message(user_id: str, content: str) -> (str, bool):
         params = content_list[1:]
     return main_control(command, params, user)
 
-
+# 处理延迟命令
 async def work_delay_command(command: str, user_id: str) -> str:
     user = UserService.get_user_by_id_with_up(user_id)
     return delay_control(command, user)

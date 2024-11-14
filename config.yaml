@@ -1,8 +1,8 @@
-appid: 102375450
-secret: vwxy02468ADGJMPSWaeimquz49EJOUag
+appid: your AppID
+secret: your AppSecret
 mongodb:
-  host: 124.221.117.237
+  host: 127.0.0.1
   port: 27017
-  database: tl-botqq
-  user: tl-botqq
-  password: k7NmMnYCPJDparSR
+  database: mongo
+  user: mongo
+  password: mongo

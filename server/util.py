@@ -5,6 +5,7 @@ import requests as req
 from server.error import LFError
 
 
+# 判断成功与否
 def make_decision(probability: float) -> bool:
     if probability > 1:
         probability = 1
@@ -12,13 +13,14 @@ def make_decision(probability: float) -> bool:
         probability = 0
     return np.random.choice([True, False], p=[probability, 1 - probability])
 
-
+# 随机决定
 def make_decision_list(keys: list, values: list, cnt: int) -> list:
     keys.append(None)
     values.append(1 - sum(values))
     return np.random.choice(keys, cnt, p=values)
 
 
+# 随机姓名
 class RandomUtil:
     NAME_XING = ['赵', '钱', '孙', '李', '周', '吴', '郑', '王', '冯', '陈', '褚', '卫', '蒋', '沈', '韩', '杨', '朱',
                  '秦', '尤', '许',
@@ -131,6 +133,7 @@ def gen_ico(tower_level: int) -> str:
 white_code = "⁡"
 
 
+# 向数字中添加空白字符防止出现下滑线
 def filter_num(num: int) -> str:
     num_str = str(num)
     if len(num_str) < 5:
@@ -138,6 +141,7 @@ def filter_num(num: int) -> str:
     return white_code.join(num_str[i:i + 4] for i in range(0, len(num_str), 4))
 
 
+# 检查名字合法性
 def check_name(name: str) -> bool:
     try:
         resp = req.post("https://www.qianmoo.top/admin/sensitiveWord/detection",
@@ -152,6 +156,3 @@ def check_name(name: str) -> bool:
     else:
         return True
 
-
-if __name__ == '__main__':
-    print(check_name("我的世界"))

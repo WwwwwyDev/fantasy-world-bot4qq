@@ -9,6 +9,3 @@ class RankDao:
             return []
         else:
             return doc["cache"]
-
-if __name__ == "__main__":
-    print(RankDao.get_tower_rank())

@@ -95,9 +95,6 @@ class StatusAdd:
             content += "\n"
         if self.critical_strike:
             content += f"暴击率加成: {int(self.critical_strike * 100)}%\n"
-            # if bs_level > 0:
-            #     content += f" + {int(bs_level * self.critical_strike * bs_rate * 100)}%"
-            # content += "\n"
         if self.critical_damage:
             content += f"暴击伤害加成: {filter_num(int(self.critical_damage * 100))}%"
             if bs_level > 0:

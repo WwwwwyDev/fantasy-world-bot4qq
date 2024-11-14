@@ -338,9 +338,6 @@ tower_boss_dropping = [*copy.deepcopy(equip_items[7:]), *copy.deepcopy(skill_ite
 tower_boss_dropping_p = []
 for item_temp in tower_boss_dropping:
     tower_boss_dropping_p.append(100/item_temp.price)
-#
-# print(sum(tower_boss_dropping_p))
-# print(sum(tower_monster_dropping_p))
 
 # 圣灵洞穴掉落
 god_fairy_land_dropping = [*copy.deepcopy(equip_items[7:]), *copy.deepcopy(skill_items)]

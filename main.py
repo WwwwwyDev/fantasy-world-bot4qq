@@ -76,6 +76,7 @@ def schedule_work():
         schedule.run_pending()
         time.sleep(1)
 
+# 运行定时任务
 def run_schedule_thread():
     job_thread = threading.Thread(target=schedule_work)
     job_thread.daemon = True
