@@ -31,7 +31,7 @@
 3. 部署mongodb数据库
 4. 在config.yaml中配置相关信息，并使用命令`python main.py`开启服务器，此时机器人可在沙箱环境中运行
 5. 通过官方审核，便可以添加至自己的群聊
-6. 使用`nohup python main.py &`挂起服务器或使用Supervisor等进程管理工具进行管理
+6. 使用命令`nohup python main.py &`挂起服务器或使用Supervisor等进程管理工具进行管理
 
 ## 体验
 扫描二维码添加机器人到群聊在线体验\
