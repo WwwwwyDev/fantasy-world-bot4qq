@@ -67,7 +67,7 @@ for command, handle in command_mp.items():
 need_delay_command = {"幻塔扫荡", "/幻塔扫荡"}
 
 
-def main_control(command: str, params: list, user: User) -> (str, bool): 
+def main_control(command: str, params: list, user: User) -> (str, bool):
     handle, cnt = tree.search(command)
     if not handle:
         return "没有该指令，请查看帮助菜单", False
@@ -87,3 +87,4 @@ def delay_control(command: str, user: User) -> str:
     if command not in delay_command_mp:
         return "延迟指令错误"
     return delay_command_mp[command](user)  # 执行延迟命令
+

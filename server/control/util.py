@@ -78,13 +78,14 @@ class Trie(object):
     def search(self, word) -> (callable, int):
         t = self.trie
         cnt = 0
+        current_handle = None
         for w in word:
             if t.get('end') is not None:
-                return t['end'], cnt
+                current_handle = t['end']
             if w not in t:
-                return None, -1
+                break
             t = t[w]
             cnt += 1
         if t.get('end') is not None:
-            return t['end'], cnt
-        return None, -1
+            current_handle = t['end']
+        return current_handle, cnt
