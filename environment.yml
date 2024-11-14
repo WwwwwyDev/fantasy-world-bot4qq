@@ -33,7 +33,7 @@ dependencies:
     - certifi==2024.8.30
     - dnspython==2.6.1
     - frozenlist==1.4.1
-    - idna==3.7
+    - idna==3.10
     - multidict==6.1.0
     - numpy==2.0.1
     - pip==24.2
@@ -43,6 +43,7 @@ dependencies:
     - pyyaml==6.0.2
     - qq-botpy==1.2.1
     - requests==2.32.3
+    - schedule==1.2.2
     - setuptools==72.1.0
     - six==1.16.0
     - tzlocal==5.2

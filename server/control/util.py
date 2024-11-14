@@ -62,3 +62,27 @@ def get_user_attack_pojo(user: User) -> UserCombatPojo:
             on_attack = ItemService.get_item_by_id(user.skill["id"]).on_attack
     return UserCombatPojo(user.name, user.level, user.blood, user.mana, attr, on_attack)
 
+class Trie(object):
+    def __init__(self):
+        self.trie = {}
+
+    def add(self, word: str, handle:callable):
+        t = self.trie
+        for w in word:
+            if w not in t:
+                t[w] = {}
+            t = t[w]
+        t['end'] = handle
+
+
+    def search(self, word) -> callable:
+        t = self.trie
+        for w in word:
+            if t.get('end') != None:
+                return t['end']
+            if w not in t:
+                return None 
+            t = t[w]
+        if t.get('end') != None:
+            return t['end']
+        return None

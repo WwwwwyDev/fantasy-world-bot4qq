@@ -9,6 +9,7 @@ from server.control.blacksmith import strengthen_equip
 from server.control.bank import see_bank, set_bank_coin, get_bank_coin, get_bank_interest, up_bank_level
 from server.control.rank import tower_rank
 from server.control.sea import coin_fairy_land, exp_fairy_land, weapon_stone_fairy_land, god_fairy_land
+from server.control.util import Trie
 
 command_mp = {
     "帮助菜单": help_menu,
@@ -57,34 +58,22 @@ command_mp = {
     "探索圣灵洞穴": god_fairy_land
 }
 
-add_mp = {}
-sorted_command = []
-for command_k in command_mp.keys():
-    add_mp["/" + command_k] = command_mp[command_k]
-    sorted_command.append(command_k)
-    sorted_command.append("/" + command_k)
+tree = Trie()
 
-command_mp.update(add_mp)
-
-sorted_command = sorted(sorted_command, key=lambda string: len(string), reverse=True)
+for command, handle in command_mp.items():
+    tree.add(command, handle)
+    tree.add("/"+command, handle)
 
 need_delay_command = {"幻塔扫荡", "/幻塔扫荡"}
 
 
-def main_control(command: str, params: list, user: User) -> (str, bool):
-    if command not in command_mp:  # 如果没有该命令， 则根据前缀进行匹配
-        f = False
-        for e in sorted_command:
-            if command.startswith(e):
-                params.insert(0, command[len(e):])
-                command = e
-                f = True
-                break
-        if not f:
-            return "没有该指令，请查看帮助菜单", False
+def main_control(command: str, params: list, user: User) -> (str, bool): 
+    handle = tree.search(command)
+    if not handle:
+        return "没有该指令，请查看帮助菜单", False
     if command in need_delay_command:  # 如果是延迟命令，则执行延迟命令（会间隔一段时间发送两条消息）
-        return command_mp[command](params, user), True  # 第二个返回值为True，意味着过一段时间会执行第二条命令
-    return command_mp[command](params, user), False
+        return handle(params, user), True  # 第二个返回值为True，意味着过一段时间会执行第二条命令
+    return handle(params, user), False
 
 
 delay_command_mp = {

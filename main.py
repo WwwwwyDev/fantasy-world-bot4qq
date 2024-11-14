@@ -1,6 +1,5 @@
 import time
 import threading
-from botpy.types.message import Ark, ArkKv
 import schedule
 
 from gv import Global
@@ -14,9 +13,9 @@ import asyncio
 
 from server.error import LFError
 
-
 _log = logging.get_logger()
 config = Global.config
+
 
 async def work(message: GroupMessage):
     user_id = message.author.member_openid
@@ -50,6 +49,7 @@ async def work(message: GroupMessage):
             msg_seq=2,
             content=delay_content)
 
+
 class FLClient(botpy.Client):
 
     async def on_ready(self):
@@ -67,6 +67,7 @@ class FLClient(botpy.Client):
     async def on_group_at_message_create(self, message: GroupMessage):
         await work(message)
 
+
 def schedule_work():
     schedule.clear()
     schedule.every().hour.at(":00").do(rank_task)
@@ -76,11 +77,13 @@ def schedule_work():
         schedule.run_pending()
         time.sleep(1)
 
+
 # 运行定时任务
 def run_schedule_thread():
     job_thread = threading.Thread(target=schedule_work)
     job_thread.daemon = True
     job_thread.start()
+
 
 if __name__ == "__main__":
     intents = botpy.Intents(public_messages=True)
