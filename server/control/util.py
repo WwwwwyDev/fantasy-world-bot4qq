@@ -63,6 +63,7 @@ def get_user_attack_pojo(user: User) -> UserCombatPojo:
     return UserCombatPojo(user.name, user.level, user.blood, user.mana, attr, on_attack)
 
 
+#  路由前缀树
 class Trie(object):
     def __init__(self):
         self.trie = {}
@@ -75,17 +76,19 @@ class Trie(object):
             t = t[w]
         t['end'] = handle
 
-    def search(self, word) -> (callable, int):
+    def search(self, word) -> (callable, int):  # 最大长度匹配
         t = self.trie
-        cnt = 0
+        pre_cnt = cnt = 0
         current_handle = None
         for w in word:
             if t.get('end') is not None:
                 current_handle = t['end']
+                pre_cnt = cnt
             if w not in t:
                 break
             t = t[w]
             cnt += 1
         if t.get('end') is not None:
             current_handle = t['end']
-        return current_handle, cnt
+            pre_cnt = cnt
+        return current_handle, pre_cnt

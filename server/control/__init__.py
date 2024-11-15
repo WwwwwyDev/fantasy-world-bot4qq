@@ -58,17 +58,17 @@ command_mp = {
     "探索圣灵洞穴": god_fairy_land
 }
 
-tree = Trie()
+router = Trie()
 
 for command, handle in command_mp.items():
-    tree.add(command, handle)
-    tree.add("/"+command, handle)
+    router.add(command, handle)
+    router.add("/" + command, handle)
 
 need_delay_command = {"幻塔扫荡", "/幻塔扫荡"}
 
 
 def main_control(command: str, params: list, user: User) -> (str, bool):
-    handle, cnt = tree.search(command)
+    handle, cnt = router.search(command)
     if not handle:
         return "没有该指令，请查看帮助菜单", False
     if cnt != len(command):

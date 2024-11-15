@@ -23,8 +23,10 @@ def user_info(params: list, user: User) -> str:
 [技能] {user.skill["name"] if user.skill["name"] else "未学习"}
 """
 
+
 def see_coin(params: list, user: User) -> str:
     return f"金币💰:{filter_num(user.coin)}"
+
 
 def see_other_user_info(params: list, user: User) -> str:
     if len(params) < 1:
@@ -98,7 +100,8 @@ def user_id(params: list, user: User) -> str:
 def user_attribute(params: list, user: User) -> str:
     attribute = get_user_attack_pojo(user)
     CombatService.get_combat_score(attribute)
-    return head("我的属性") + CombatService.get_attribute_content(attribute) + f"\n[经验加成] {user.exp_add_cnt}%" +  f"\n[金币加成] {user.coin_add_cnt}%" + f"\n[战斗力] {filter_num(CombatService.get_combat_score(attribute))}"
+    return head("我的属性") + CombatService.get_attribute_content(
+        attribute) + f"\n[经验加成] {user.exp_add_cnt}%" + f"\n[金币加成] {user.coin_add_cnt}%" + f"\n[战斗力] {filter_num(CombatService.get_combat_score(attribute))}"
 
 
 def user_update(params: list, user: User) -> (str, bool):

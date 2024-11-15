@@ -18,9 +18,10 @@ def coin_fairy_land(params: list, user: User) -> str:
     user_pojo.current_blood = user_pojo.blood_max
     user_pojo.current_mana = user_pojo.mana_max
     _, _, _, total_attack = CombatService.attack(user_pojo, sea_monster_pojo)
-    get_coin = int(max(((user.coin_add_cnt/100 + 1) * total_attack) // 50, 100))
-    UserService.update_user(user.get_id(), {"$set": {"coin_fairyland": True},"$inc":{"coin": get_coin}})
+    get_coin = int(max(((user.coin_add_cnt / 100 + 1) * total_attack) // 50, 100))
+    UserService.update_user(user.get_id(), {"$set": {"coin_fairyland": True}, "$inc": {"coin": get_coin}})
     return f"在秘境中，遇到了{sea_monster_pojo.name}，随即开始进行战斗，最终对其共造成了{filter_num(total_attack)}点伤害，获得了{filter_num(get_coin)}个金币"
+
 
 def exp_fairy_land(params: list, user: User) -> str:
     if user.exp_fairyland:
@@ -30,9 +31,10 @@ def exp_fairy_land(params: list, user: User) -> str:
     user_pojo.current_blood = user_pojo.blood_max
     user_pojo.current_mana = user_pojo.mana_max
     _, _, _, total_attack = CombatService.attack(user_pojo, sea_monster_pojo)
-    get_exp = int(max(((user.exp_add_cnt/100 + 1) * total_attack) // 45, 100))
-    UserService.update_user(user.get_id(), {"$set": {"exp_fairyland": True},"$inc":{"exp": get_exp}})
+    get_exp = int(max(((user.exp_add_cnt / 100 + 1) * total_attack) // 45, 100))
+    UserService.update_user(user.get_id(), {"$set": {"exp_fairyland": True}, "$inc": {"exp": get_exp}})
     return f"在秘境中，遇到了{sea_monster_pojo.name}，随即开始进行战斗，最终对其共造成了{filter_num(total_attack)}点伤害，获得了{filter_num(get_exp)}点经验"
+
 
 def weapon_stone_fairy_land(params: list, user: User) -> str:
     if user.weapon_stone_fairyland:
@@ -49,6 +51,7 @@ def weapon_stone_fairy_land(params: list, user: User) -> str:
         user.bag["SP1"] = get_stone
     UserService.update_user(user.get_id(), {"$set": {"weapon_stone_fairyland": True, "bag": user.bag}})
     return f"在秘境中，遇到了{sea_monster_pojo.name}，随即开始进行战斗，最终对其共造成了{filter_num(total_attack)}点伤害，获得了{get_stone}个强化石"
+
 
 def god_fairy_land(params: list, user: User) -> str:
     if user.god_fairyland:
@@ -77,5 +80,5 @@ def god_fairy_land(params: list, user: User) -> str:
     get_content = ""
     for item, cnt in item_get_mp.items():
         get_content += f"{item.name}:{cnt}个 "
-    UserService.update_user(user.get_id(), {"$set": {"god_fairyland": True,  "bag": user.bag}})
+    UserService.update_user(user.get_id(), {"$set": {"god_fairyland": True, "bag": user.bag}})
     return f"在秘境中，遇到了{sea_monster_pojo.name}，随即开始进行战斗，最终对其共造成了{filter_num(total_attack)}点伤害，获得了 {get_content}"

@@ -7,7 +7,8 @@ from server.util import make_decision, filter_num
 
 def normal_attack(pojo_proactive: CombatPojo, pojo_reactive: CombatPojo) -> (str, int):
     content = ""
-    base_attack = max(pojo_proactive.attack - pojo_reactive.defense, 1) * random.uniform(1, 1.2) * (1 + pojo_proactive.hurt_percentage_add)
+    base_attack = max(pojo_proactive.attack - pojo_reactive.defense, 1) * random.uniform(1, 1.2) * (
+                1 + pojo_proactive.hurt_percentage_add)
     content += f"{pojo_proactive.name}发动普通攻击，"
     is_critical = make_decision(min(max(pojo_proactive.critical_strike - pojo_reactive.defense_strike, 0), 1))
     if is_critical:
@@ -19,6 +20,7 @@ def normal_attack(pojo_proactive: CombatPojo, pojo_reactive: CombatPojo) -> (str
         pojo_reactive.current_blood = 0
     content += f"对{pojo_reactive.name}造成{filter_num(base_attack)}点伤害"
     return content, base_attack
+
 
 # 战斗服务
 class CombatService:
@@ -113,7 +115,8 @@ class CombatService:
     @staticmethod
     def get_combat_score(attribute: CombatPojo) -> int:
         result_attack = attribute.attack * (1 + attribute.critical_damage)
-        return int(attribute.blood_max + attribute.mana_max * 16 + attribute.defense * 16 + attribute.speed * 50 + attribute.critical_strike * 5000 + attribute.defense_strike * 5000 + result_attack * 10)
+        return int(
+            attribute.blood_max + attribute.mana_max * 16 + attribute.defense * 16 + attribute.speed * 50 + attribute.critical_strike * 5000 + attribute.defense_strike * 5000 + result_attack * 10)
 
     @staticmethod
     def get_combat_record(user_id: str) -> dict | None:
